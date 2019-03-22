@@ -76,6 +76,7 @@ export default {
           message: '登录成功',
           type: 'success'
         })
+        this.$router.replace('/')
       } else {
         console.log(resData)
         this.$message.error(`登录失败：${meta.msg}`)
