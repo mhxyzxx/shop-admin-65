@@ -27,7 +27,12 @@
             <span>用户管理</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="1-1">用户列表</el-menu-item>
+            <el-menu-item index="1-1">
+              <template slot="title">
+                <i class="el-icon-info"></i>
+                <span>用户列表</span>
+              </template>
+            </el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="2">
@@ -83,7 +88,10 @@
       </el-menu>
       <!-- /导航组件 -->
     </el-aside>
-    <el-main>Main</el-main>
+    <el-main>
+      <!-- Layout 的 children 子路由会展示到这里 -->
+      <router-view></router-view>
+    </el-main>
   </el-container>
 </el-container>
 </template>
