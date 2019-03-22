@@ -5,13 +5,26 @@
       el-form 表单组件
         label-position 设定 label的方向
           left、top、right
-
+      配置表单验证
+        1. 为 el-form 组件添加 :rules="loginFromRules" 验证规则
+        2. 为 el-form-item 组件添加 prop="验证的字段"
+        3. 提交表单的时候获取表单的验证状态（验证通过或者验证失败），根据成功与否进行提交表
+          为 el-form 添加 ref="loginFormEl" 值随便起，给的你自己认识就行
+          完了在表单提交的时候：
+            this.$refs.loginFormEl.validate(valid => {
+              // valid 是一个布尔值，表示验证成功与否
+            })
      -->
-    <el-form label-position="top" label-width="80px" :model="loginForm">
-      <el-form-item label="用户名">
+    <el-form
+      label-position="top"
+      :rules="loginFormRules"
+      label-width="80px"
+      :model="loginForm"
+      ref="loginFormEl">
+      <el-form-item label="用户名" prop="username">
         <el-input v-model="loginForm.username"></el-input>
       </el-form-item>
-      <el-form-item label="密码">
+      <el-form-item label="密码" prop="password">
         <el-input v-model="loginForm.password"></el-input>
       </el-form-item>
       <el-form-item>
@@ -32,11 +45,30 @@ export default {
       loginForm: {
         username: '',
         password: ''
+      },
+
+      loginFormRules: {
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+        ]
       }
     }
   },
   methods: {
     async onSubmit () {
+      this.$refs.loginFormEl.validate(valid => {
+        if (valid) { // 验证通过，提交表单
+          this.login()
+        } else {
+          return false
+        }
+      })
+    },
+
+    async login () {
       const resData = await axios.post('http://localhost:8888/api/private/v1/login', this.loginForm)
       const { meta } = resData.data
       if (meta.status === 200) {
