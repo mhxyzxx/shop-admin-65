@@ -1,6 +1,16 @@
 <template>
 <div>
-  <p>Layout 组件</p>
+  <el-row class="app-header" :gutter="20">
+    <el-col :span="4">
+      <img src="./logo.png" alt="黑马程序员">
+    </el-col>
+    <el-col :span="16">
+      黑马程序员
+    </el-col>
+    <el-col :span="4">
+      <a href="#">退出</a>
+    </el-col>
+  </el-row>
 </div>
 </template>
 
@@ -13,5 +23,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.app-header {
+  background-color: #ccc;
+  display: flex;
+  align-items: center;
+}
 </style>
