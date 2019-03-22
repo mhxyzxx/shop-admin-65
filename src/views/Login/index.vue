@@ -1,6 +1,24 @@
 <template>
 <div class="login-wrap">
-  <div class="login-container"></div>
+  <div class="login-container">
+    <!--
+      el-form 表单组件
+        label-position 设定 label的方向
+          left、top、right
+
+     -->
+    <el-form label-position="top" label-width="80px" :model="loginForm">
+      <el-form-item label="用户名">
+        <el-input v-model="loginForm.username"></el-input>
+      </el-form-item>
+      <el-form-item label="密码">
+        <el-input v-model="loginForm.password"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button class="login-btn" type="primary" @click.prevent="onSubmit">登录</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
 </div>
 </template>
 
@@ -8,7 +26,15 @@
 export default {
   name: 'Login',
   data () {
-    return {}
+    return {
+      loginForm: {
+        username: '',
+        password: ''
+      }
+    }
+  },
+  methods: {
+    onSubmit () {}
   }
 }
 </script>
@@ -24,8 +50,13 @@ export default {
 
   .login-container {
     width: 500px;
-    height: 200px;
+    height: 300px;
+    padding: 50px;
     background-color: #fff;
     border-radius: 10px;
+  }
+
+  .login-btn {
+    width: 100%;
   }
 </style>
