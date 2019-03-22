@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import './css/main.css'
 
 // 注册 ElementUI 全局组件
 Vue.use(ElementUI)
