@@ -23,7 +23,8 @@
         @close="handleClose">
         <el-submenu index="1">
           <template slot="title">
-            <i class="el-icon-location"></i>
+            <!-- <i class="el-icon-location"></i> -->
+            <i class="fas fa-user fa-lg"></i>
             <span>用户管理</span>
           </template>
           <el-menu-item-group>
@@ -130,6 +131,10 @@ export default {
 .el-aside {
   height: 100%;
   background-color: #d3dce6;
+}
+
+.el-submenu .fas {
+  margin-right: 5px;
 }
 
 .el-main {
