@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'Login',
   data () {
@@ -34,7 +36,19 @@ export default {
     }
   },
   methods: {
-    onSubmit () {}
+    async onSubmit () {
+      const resData = await axios.post('http://localhost:8888/api/private/v1/login', this.loginForm)
+      const { meta } = resData.data
+      if (meta.status === 200) {
+        this.$message({
+          message: '登录成功',
+          type: 'success'
+        })
+      } else {
+        console.log(resData)
+        this.$message.error(`登录失败：${meta.msg}`)
+      }
+    }
   }
 }
 </script>
