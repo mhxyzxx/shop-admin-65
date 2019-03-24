@@ -29,6 +29,7 @@ const router = new Router({
  * next 放行规则
  */
 router.beforeEach((to, from, next) => {
+  console.log('1. 先进入路由导航，校验是否有 token')
   // 如果路由路径是 /login ，则直接允许通过
   if (to.path === '/login') {
     return next()

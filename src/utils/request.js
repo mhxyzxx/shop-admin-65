@@ -3,6 +3,7 @@
  */
 
 import axios from 'axios'
+import router from '@/router'
 
 // axios 可以配置基础路径，这样的话就不需要每次请求的时候都写那么长的路径了
 // 最简单的方式就像这样，但是不推荐
@@ -24,6 +25,7 @@ const http = axios.create({
  */
 // Add a request interceptor
 http.interceptors.request.use(function (config) {
+  console.log('3. 请求经过请求拦截器，这里统一的加 token')
   if (config.url !== '/login') {
     config.headers.Authorization = window.localStorage.getItem('token')
   }
@@ -36,10 +38,19 @@ http.interceptors.request.use(function (config) {
 
 /**
  * axios 响应拦截器
+ * 所有请求收到的响应结果都会经过这里
+ * 我们可以在这里做业务逻辑处理
+ * 例如统一判断 meta.status === 401 跳转登录页
  */
 http.interceptors.response.use(function (response) {
+  console.log('4. 响应回来先经过响应拦截器，这里判断响应码是否为 401')
+  if (response.data.meta.staus === 401) {
+    // 跳转到登录页
+    // 组件的 this.$router 就是 router/index.js 中 new VueRouter 实例
+    router.replace('/login')
+  }
   // Do something with response data
-  return response
+  return response // 这里 return 的 response 会作为你真正的响应结果
 }, function (error) {
   // Do something with response error
   return Promise.reject(error)
