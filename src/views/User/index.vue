@@ -10,6 +10,22 @@
     </el-breadcrumb>
     <!-- /面包屑路径导航组件 -->
   </div>
+
+  <!-- 操作选项 -->
+  <el-row :gutter="20">
+    <el-col :span="4">
+      <el-input
+        placeholder="请输入内容"
+        v-model="searchText">
+        <i slot="prefix" class="el-input__icon el-icon-search"></i>
+      </el-input>
+    </el-col>
+    <el-col :span="4">
+      <el-button type="primary">添加用户</el-button>
+    </el-col>
+  </el-row>
+  <!-- /操作选项 -->
+
   <!-- /卡片头部 -->
   <!-- 卡片内容 -->
 
@@ -17,6 +33,7 @@
     表格组件
     data 是表格的数据
     stripe 斑马纹
+    border 带边框
     el-table-column 表格列组件
       你只需要设计表格列：列名+列值
       label 列名
@@ -27,6 +44,7 @@
   <el-table
     :data="users"
     stripe
+    border
     style="width: 100%">
     <el-table-column
       type="index">
@@ -57,7 +75,8 @@ export default {
   name: 'UserList',
   data () {
     return {
-      users: []
+      users: [],
+      searchText: ''
     }
   },
   async created () {
@@ -78,5 +97,9 @@ export default {
 <style scoped>
 .el-card {
   height: 100%;
+}
+
+.el-table {
+  margin-top: 15px;
 }
 </style>
