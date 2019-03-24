@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { login } from '@/api'
 
 export default {
   name: 'Login',
@@ -69,8 +69,7 @@ export default {
     },
 
     async login () {
-      const resData = await axios.post('http://localhost:8888/api/private/v1/login', this.loginForm)
-      const { meta, data } = resData.data
+      const { meta, data } = await login(this.loginForm)
       if (meta.status === 200) {
         this.$message({
           message: '登录成功',
@@ -80,7 +79,6 @@ export default {
         window.localStorage.setItem('token', data.token)
         this.$router.replace('/')
       } else {
-        console.log(resData)
         this.$message.error(`登录失败：${meta.msg}`)
       }
     }
