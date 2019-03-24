@@ -1,7 +1,18 @@
 <template>
-<div>
-  <p>UserList 用户里列表组件</p>
-</div>
+<el-card class="box-card">
+  <!-- 卡片头部 -->
+  <div slot="header" class="clearfix">
+    <!-- 面包屑路径导航组件 -->
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+      <el-breadcrumb-item>用户列表</el-breadcrumb-item>
+    </el-breadcrumb>
+    <!-- /面包屑路径导航组件 -->
+  </div>
+  <!-- /卡片头部 -->
+  <!-- 卡片内容 -->
+</el-card>
 </template>
 
 <script>
@@ -22,5 +33,8 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.el-card {
+  height: 100%;
+}
 </style>

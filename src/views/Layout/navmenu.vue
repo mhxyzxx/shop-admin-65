@@ -11,14 +11,12 @@
       <i class="fas fa-user fa-lg"></i>
       <span>用户管理</span>
     </template>
-    <el-menu-item-group>
-      <el-menu-item index="/users">
-        <template slot="title">
-          <i class="el-icon-info"></i>
-          <span>用户列表</span>
-        </template>
-      </el-menu-item>
-    </el-menu-item-group>
+    <el-menu-item index="/users">
+      <template slot="title">
+        <i class="el-icon-info"></i>
+        <span>用户列表</span>
+      </template>
+    </el-menu-item>
   </el-submenu>
   <el-submenu index="2">
     <template slot="title">
