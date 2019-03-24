@@ -83,17 +83,18 @@
       :model="addFromData"
       size="mini"
       label-position="left"
-      ref="addFormEl">
-      <el-form-item label="用户名" label-width="80px">
+      ref="addFormEl"
+      :rules="addFormRules">
+      <el-form-item label="用户名" label-width="80px" prop="username">
         <el-input v-model="addFromData.username" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="密码" label-width="80px">
+      <el-form-item label="密码" label-width="80px" prop="password">
         <el-input v-model="addFromData.password" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="邮箱" label-width="80px">
+      <el-form-item label="邮箱" label-width="80px" prop="email">
         <el-input v-model="addFromData.email" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="电话" label-width="80px">
+      <el-form-item label="电话" label-width="80px" prop="mobile">
         <el-input v-model="addFromData.mobile" autocomplete="off"></el-input>
       </el-form-item>
     </el-form>
@@ -122,7 +123,21 @@ export default {
         email: '',
         mobile: ''
       },
-      tableLoading: true
+      tableLoading: true,
+      addFormRules: {
+        username: [
+          { required: true, message: '请输入邮箱', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' }
+        ],
+        email: [
+          { required: true, message: '请输入邮箱', trigger: 'blur' }
+        ],
+        mobile: [
+          { required: true, message: '请输入电话', trigger: 'blur' }
+        ]
+      }
     }
   },
   async created () {
@@ -138,11 +153,18 @@ export default {
       this.users = data.users
       this.tableLoading = false // 取消 loading 效果
     },
-    async handleAdd () {
+    handleAdd () {
+      this.$refs.addFormEl.validate(valid => {
+        if (!valid) { // 验证失败，什么都不做
+          return
+        }
+        this.submitAdd() // 验证通过，提交表单
+      })
+    },
+    async submitAdd () {
       const { meta } = await addUser(this.addFromData)
       if (meta.status === 201) {
-        console.log(this.$refs.addFormEl)
-        this.$refs.addFormEl.resetFields() // 清空表单数据，（对话框中的有问题）
+        this.$refs.addFormEl.resetFields() // 清空表单数据
         this.addFormVisible = false // 隐藏对话框
         this.loadUsers() // 重新加载用户数据列表
       }
