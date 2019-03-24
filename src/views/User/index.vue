@@ -22,7 +22,7 @@
         </el-input>
       </el-col>
       <el-col :span="4">
-        <el-button type="primary">添加用户</el-button>
+        <el-button type="primary" @click="addFormVisible = true">添加用户</el-button>
       </el-col>
     </el-row>
     <!-- /操作选项 -->
@@ -74,7 +74,11 @@
   visible 布尔值，对话框是否显示
   -->
   <el-dialog title="添加用户" :visible.sync="addFormVisible" width="40%">
-    <el-form :model="addFromData" size="mini" label-position="left">
+    <el-form
+      :model="addFromData"
+      size="mini"
+      label-position="left"
+      ref="addFormEl">
       <el-form-item label="用户名" label-width="80px">
         <el-input v-model="addFromData.username" autocomplete="off"></el-input>
       </el-form-item>
@@ -90,7 +94,7 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="addFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click="addFormVisible = false">确 定</el-button>
+      <el-button type="primary" @click.prevent="handleAdd">确 定</el-button>
     </div>
   </el-dialog>
   <!-- /添加用户对话框 -->
@@ -98,7 +102,7 @@
 </template>
 
 <script>
-import { getUserList } from '@/api/user'
+import { getUserList, addUser } from '@/api/user'
 
 export default {
   name: 'UserList',
@@ -106,7 +110,7 @@ export default {
     return {
       users: [],
       searchText: '',
-      addFormVisible: true, // 对话框是否显示
+      addFormVisible: false, // 对话框是否显示
       addFromData: {
         username: '',
         password: '',
@@ -125,6 +129,15 @@ export default {
     async loadUsers () {
       const { data } = await getUserList({ pagenum: 1, pagesize: 100 })
       this.users = data.users
+    },
+    async handleAdd () {
+      const { meta } = await addUser(this.addFromData)
+      if (meta.status === 201) {
+        console.log(this.$refs.addFormEl)
+        this.$refs.addFormEl.resetFields() // 清空表单数据，（对话框中的有问题）
+        this.addFormVisible = false // 隐藏对话框
+        this.loadUsers() // 重新加载用户数据列表
+      }
     }
   }
 }

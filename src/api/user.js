@@ -14,3 +14,17 @@ export const getUserList = ({ pagenum = 1, pagesize = 5 }) => request({ // const
     pagesize
   }
 }).then(res => res.data)
+
+/**
+ * 添加用户
+ */
+export const addUser = ({ username, password, email, mobile }) => request({
+  method: 'POST',
+  url: '/users',
+  data: {
+    username,
+    password,
+    email,
+    mobile
+  }
+}).then(res => res.data)
