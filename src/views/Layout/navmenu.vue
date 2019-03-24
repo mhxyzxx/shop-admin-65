@@ -3,7 +3,8 @@
   default-active="2"
   class="el-menu-vertical-demo"
   @open="handleOpen"
-  @close="handleClose">
+  @close="handleClose"
+  :router="true">
   <el-submenu index="1">
     <template slot="title">
       <!-- <i class="el-icon-location"></i> -->
@@ -11,7 +12,7 @@
       <span>用户管理</span>
     </template>
     <el-menu-item-group>
-      <el-menu-item index="1-1">
+      <el-menu-item index="/users">
         <template slot="title">
           <i class="el-icon-info"></i>
           <span>用户列表</span>
@@ -24,17 +25,18 @@
       <i class="el-icon-location"></i>
       <span>权限管理</span>
     </template>
-    <el-menu-item-group>
-      <el-menu-item index="2-1">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>角色列表</span>
-        </template>
-      </el-menu-item>
-    </el-menu-item-group>
-    <el-menu-item-group>
-      <el-menu-item index="2-2">权限列表</el-menu-item>
-    </el-menu-item-group>
+    <el-menu-item index="/roles">
+      <template slot="title">
+        <i class="el-icon-location"></i>
+        <span>角色列表</span>
+      </template>
+    </el-menu-item>
+    <el-menu-item index="/rights">
+      <template slot="title">
+        <i class="el-icon-location"></i>
+        <span>权限列表</span>
+      </template>
+    </el-menu-item>
   </el-submenu>
   <el-submenu index="3">
     <template slot="title">
