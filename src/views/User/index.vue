@@ -41,11 +41,13 @@
         prop 数据名
         width 列宽，默认 px
       它内部会自动去遍历 data 数据，循环生成表格列
+      v-loading 是 element-ui 扩展的一个自定义指令，用于添加 loading 加载效果
     -->
     <el-table
       :data="users"
       stripe
       border
+      v-loading="tableLoading"
       style="width: 100%">
       <el-table-column
         type="index">
@@ -73,7 +75,10 @@
   title 对话框标题
   visible 布尔值，对话框是否显示
   -->
-  <el-dialog title="添加用户" :visible.sync="addFormVisible" width="40%">
+  <el-dialog
+    title="添加用户"
+    :visible.sync="addFormVisible"
+    width="40%">
     <el-form
       :model="addFromData"
       size="mini"
@@ -116,7 +121,8 @@ export default {
         password: '',
         email: '',
         mobile: ''
-      }
+      },
+      tableLoading: true
     }
   },
   async created () {
@@ -127,8 +133,10 @@ export default {
   },
   methods: {
     async loadUsers () {
+      this.tableLoading = true // 开始加载 loading 效果
       const { data } = await getUserList({ pagenum: 1, pagesize: 100 })
       this.users = data.users
+      this.tableLoading = false // 取消 loading 效果
     },
     async handleAdd () {
       const { meta } = await addUser(this.addFromData)
