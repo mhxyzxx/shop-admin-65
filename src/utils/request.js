@@ -10,7 +10,6 @@ import router from '@/router'
 // 因为当你有多个不同的请求接口路径的时候
 // axios.defaults.baseURL = 'https://api.example.com'
 
-
 // 我建议的方式就是调用 create 方法创建一个 axios 实例
 // axios 实例拥有和 axios 一模一样的功能
 // 好处就是我们可以针对不同 url 的接口创建多个 axios 实例
@@ -57,4 +56,3 @@ http.interceptors.response.use(function (response) {
 })
 
 export default http
-
