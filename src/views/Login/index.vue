@@ -70,12 +70,14 @@ export default {
 
     async login () {
       const resData = await axios.post('http://localhost:8888/api/private/v1/login', this.loginForm)
-      const { meta } = resData.data
+      const { meta, data } = resData.data
       if (meta.status === 200) {
         this.$message({
           message: '登录成功',
           type: 'success'
         })
+        // 将用户通过用户名+密码交换到的 token（身份令牌）放到本地存储中，用以在别的地方去使用
+        window.localStorage.setItem('token', data.token)
         this.$router.replace('/')
       } else {
         console.log(resData)

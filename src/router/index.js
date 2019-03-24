@@ -8,7 +8,7 @@ import UserList from '@/views/User'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     { path: '/login', component: Login }, // 展示到 App.vue 的 router-view 中
     {
@@ -22,3 +22,28 @@ export default new Router({
     }
   ]
 })
+
+/**
+ * to 去哪儿
+ * from 来自哪里
+ * next 放行规则
+ */
+router.beforeEach((to, from, next) => {
+  // 如果路由路径是 /login ，则直接允许通过
+  if (to.path === '/login') {
+    return next()
+  }
+
+  // 否则校验登录状态
+  const token = window.localStorage.getItem('token')
+
+  //   如果没有登录，跳转到登录页
+  if (!token) {
+    return next('/login')
+  }
+
+  //   如果登录了，允许通过
+  next()
+})
+
+export default router
