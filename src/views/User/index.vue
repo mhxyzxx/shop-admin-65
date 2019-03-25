@@ -134,12 +134,17 @@
     </div>
   </el-dialog>
   <!-- /添加用户对话框 -->
+
+  <!-- 编辑用户对话框 -->
+  <UserEdit></UserEdit>
+  <!-- /编辑用户对话框 -->
 </div>
 </template>
 
 <script>
 // import { getUserList, addUser } from '@/api/user'
 import * as User from '@/api/user'
+import UserEdit from './edit'
 
 export default {
   name: 'UserList',
@@ -235,6 +240,9 @@ export default {
         })
       }
     }
+  },
+  components: {
+    UserEdit
   }
 }
 </script>
