@@ -52,3 +52,15 @@ export const getById = id => request({
   method: 'GET',
   url: `/users/${id}`
 }).then(res => res.data)
+
+/**
+ * 根据 id 修改用户基本信息
+ */
+export const updateById = (id, data) => request({
+  method: 'PUT',
+  url: `/users/${id}`,
+  data: { // PUT 请求体和 POST 一样
+    email: data.email,
+    mobile: data.mobile
+  }
+}).then(res => res.data)

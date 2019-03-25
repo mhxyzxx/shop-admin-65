@@ -141,7 +141,7 @@
     2. 然后就可以在当前组件中通过 this.$refs.组件的ref名字 来访问到这个组件了
     this.$refs.userEditEl 可以直接访问到 UserEdit 组件
    -->
-  <UserEdit ref="userEditEl"></UserEdit>
+  <UserEdit ref="userEditEl" v-on:edit-success="loadUsers"></UserEdit>
   <!-- /编辑用户对话框 -->
 </div>
 </template>
