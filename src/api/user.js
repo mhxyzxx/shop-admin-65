@@ -64,3 +64,14 @@ export const updateById = (id, data) => request({
     mobile: data.mobile
   }
 }).then(res => res.data)
+
+/**
+ * 根据用户 id 修改用户角色
+ */
+export const updateUserRoleByUserId = (userId, roleId) => request({
+  method: 'PUT',
+  url: `/users/${userId}/role`,
+  data: { // PUT 请求体和 POST 一样
+    rid: roleId
+  }
+}).then(res => res.data)

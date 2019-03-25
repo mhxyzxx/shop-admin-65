@@ -17,6 +17,7 @@
           el-select 会自动让 el-options 的 value 与 editForm.rid 相等的被选中
          -->
         <el-select placeholder="请选择" v-model="editForm.rid">
+          <el-option :value="-1" label="请选择"></el-option>
           <el-option
             v-for="item in roles"
             :label="item.roleName"
@@ -27,13 +28,13 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="fomrVisible = false">取 消</el-button>
-      <el-button type="primary" @click.prevent="handleEdit">确 定</el-button>
+      <el-button type="primary" @click.prevent="handleEditRole">确 定</el-button>
     </div>
   </el-dialog>
 </template>
 
 <script>
-import { getById as getUserById } from '@/api/user'
+import { getById as getUserById, updateUserRoleByUserId } from '@/api/user'
 import { getRoleList } from '@/api/role'
 
 export default {
@@ -60,27 +61,15 @@ export default {
     }
   },
   methods: {
-    handleEdit () {
-      this.$refs.FormEl.validate(valid => {
-        if (!valid) {
-          return
-        }
-        this.submitEdit()
-      })
-    },
-
-    async submitEdit () {
-      const { id, email, mobile } = this.editForm
-      const { data, meta } = await updateUserById(id, {
-        email,
-        mobile
-      })
+    async handleEditRole () {
+      const { id: userId, rid: roleId } = this.editForm
+      const { meta, data } = await updateUserRoleByUserId(userId, roleId)
       if (meta.status === 200) {
-        this.$emit('edit-role-success')
+        // 关闭对话框
         this.fomrVisible = false
         this.$message({
           type: 'success',
-          message: '分配成功'
+          message: '分配用户角色成功'
         })
       }
     },
