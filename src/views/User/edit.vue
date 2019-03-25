@@ -35,7 +35,7 @@ export default {
       editForm: {
         username: '',
         email: '',
-        mobile : ''
+        mobile: ''
       },
       formRules: {
         email: [
@@ -49,6 +49,10 @@ export default {
   },
   methods: {
     handleEdit () {
+    },
+    showEditDialog (item) {
+      console.log(item)
+      this.fomrVisible = true
     }
   }
 }

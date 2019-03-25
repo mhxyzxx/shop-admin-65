@@ -88,7 +88,7 @@
         <template slot-scope="scope">
           <el-button
             size="mini"
-            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            @click="$refs.userEditEl.showEditDialog(scope.row)">编辑</el-button>
           <el-button
             size="mini"
             type="danger"
@@ -136,7 +136,12 @@
   <!-- /添加用户对话框 -->
 
   <!-- 编辑用户对话框 -->
-  <UserEdit></UserEdit>
+  <!--
+    1. 为组件添加一个 ref 属性，起个名字
+    2. 然后就可以在当前组件中通过 this.$refs.组件的ref名字 来访问到这个组件了
+    this.$refs.userEditEl 可以直接访问到 UserEdit 组件
+   -->
+  <UserEdit ref="userEditEl"></UserEdit>
   <!-- /编辑用户对话框 -->
 </div>
 </template>
