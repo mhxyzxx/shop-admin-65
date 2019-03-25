@@ -102,6 +102,23 @@
       </el-table-column>
     </el-table>
     <!-- /表格组件 -->
+
+    <!--
+      分页组件 el-pagination
+      background 带有背景色
+      layout 分页结构，prev 显示上一页，pager next 下一页
+      total 数据总条数
+      默认按照 10 条每页进行分页
+      current-change 页码改变会触发该事件
+    -->
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :total="total"
+      @current-change="loadUsers"
+      :page-size="5">
+    </el-pagination>
+    <!-- /分页组件 -->
   </el-card>
 
   <!--
@@ -187,7 +204,8 @@ export default {
         mobile: [
           { required: true, message: '请输入电话', trigger: 'blur' }
         ]
-      }
+      },
+      total: 0
     }
   },
   async created () {
@@ -197,10 +215,11 @@ export default {
     this.loadUsers()
   },
   methods: {
-    async loadUsers () {
+    async loadUsers (page = 1) {
       this.tableLoading = true // 开始加载 loading 效果
-      const { data } = await User.getUserList({ pagenum: 1, pagesize: 100 })
+      const { data } = await User.getUserList({ pagenum: page, pagesize: 5 })
       this.users = data.users
+      this.total = data.total
       this.tableLoading = false // 取消 loading 效果
     },
     handleAdd () {
@@ -268,6 +287,10 @@ export default {
 }
 
 .el-table {
+  margin-top: 15px;
+}
+
+.el-pagination {
   margin-top: 15px;
 }
 </style>
