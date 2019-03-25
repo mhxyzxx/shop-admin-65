@@ -13,7 +13,16 @@
         <el-input v-model="editForm.username" autocomplete="off" disabled></el-input>
       </el-form-item>
       <el-form-item label="角色" label-width="80px" prop="email">
-        <el-input v-model="editForm.email" autocomplete="off"></el-input>
+        <!--
+          el-select 会自动让 el-options 的 value 与 editForm.rid 相等的被选中
+         -->
+        <el-select placeholder="请选择" v-model="editForm.rid">
+          <el-option
+            v-for="item in roles"
+            :label="item.roleName"
+            :value="item.id">
+          </el-option>
+        </el-select>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -24,18 +33,22 @@
 </template>
 
 <script>
-import { getById as getUserById, updateById as updateUserById } from '@/api/user'
+import { getById as getUserById } from '@/api/user'
+import { getRoleList } from '@/api/role'
 
 export default {
   name: 'UserEditRole',
   data () {
     return {
+      // roleId: 30,
       fomrVisible: false,
       editForm: {
         username: '',
         email: '',
-        mobile: ''
+        mobile: '',
+        rid: 0
       },
+      roles: [],
       formRules: {
         email: [
           { required: true, message: '请输入邮箱', trigger: 'blur' }
@@ -77,6 +90,10 @@ export default {
       if (meta.status === 200) {
         this.editForm = data
         this.fomrVisible = true // 显式弹框
+      }
+      const { data: roleData, meta: roleMeta } = await getRoleList()
+      if (roleMeta.status === 200) {
+        this.roles = roleData
       }
     }
   }
