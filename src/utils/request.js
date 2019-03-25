@@ -4,6 +4,7 @@
 
 import axios from 'axios'
 import router from '@/router'
+import { getToken } from '@/utils/auth'
 
 // axios 可以配置基础路径，这样的话就不需要每次请求的时候都写那么长的路径了
 // 最简单的方式就像这样，但是不推荐
@@ -26,7 +27,8 @@ const http = axios.create({
 http.interceptors.request.use(function (config) {
   console.log('3. 请求经过请求拦截器，这里统一的加 token')
   if (config.url !== '/login') {
-    config.headers.Authorization = window.localStorage.getItem('token')
+    // config.headers.Authorization = window.localStorage.getItem('token')
+    config.headers.Authorization = getToken()
   }
   // Do something before request is sent
   return config // 请求通过的规则，如果不 return config，则请求不会发出去

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import { getToken } from '@/utils/auth'
 
 import Login from '@/views/Login'
 import Layout from '@/views/Layout'
@@ -36,7 +37,8 @@ router.beforeEach((to, from, next) => {
   }
 
   // 否则校验登录状态
-  const token = window.localStorage.getItem('token')
+  // const token = window.localStorage.getItem('token')
+  const token = getToken()
 
   //   如果没有登录，跳转到登录页
   if (!token) {

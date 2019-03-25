@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import { removeToken } from '@/utils/auth'
+
 export default {
   name: 'AppHeader',
   data () {
@@ -26,7 +28,8 @@ export default {
         type: 'warning'
       }).then(() => { // 确认
         // 1. 清空登录状态 token
-        window.localStorage.removeItem('token')
+        // window.localStorage.removeItem('token')
+        removeToken()
         // 2. 跳转到登录页
         this.$router.replace('/login')
         this.$message({

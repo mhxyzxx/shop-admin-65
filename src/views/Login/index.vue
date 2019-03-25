@@ -37,6 +37,7 @@
 
 <script>
 import { login } from '@/api'
+import { setToken } from '@/utils/auth'
 
 export default {
   name: 'Login',
@@ -76,7 +77,8 @@ export default {
           type: 'success'
         })
         // 将用户通过用户名+密码交换到的 token（身份令牌）放到本地存储中，用以在别的地方去使用
-        window.localStorage.setItem('token', data.token)
+        // window.localStorage.setItem('token', data.token)
+        setToken(data.token)
         this.$router.replace('/')
       } else {
         this.$message.error(`登录失败：${meta.msg}`)
