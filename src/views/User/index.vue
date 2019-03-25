@@ -66,6 +66,35 @@
         prop="mobile"
         label="电话">
       </el-table-column>
+      <el-table-column label="用户状态">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.mg_state"
+            active-color="#13ce66"
+            inactive-color="#ff4949">
+          </el-switch>
+        </template>
+      </el-table-column>
+      <!--
+        自定义表格列
+        1. 自定义内容写到 <template slot-scope="scope"></template>
+           slot-scope 是固定的属性
+           值 "scope" 是随便起的一个名字
+           在 template 中，scope.row 用于获取当前遍历项（item）
+           scope.$index 就是遍历的索引
+       -->
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+          <el-button type="success" icon="el-icon-check" size="mini">分类角色</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <!-- /表格组件 -->
   </el-card>
@@ -168,7 +197,10 @@ export default {
         this.addFormVisible = false // 隐藏对话框
         this.loadUsers() // 重新加载用户数据列表
       }
-    }
+    },
+
+    handleEdit () {},
+    handleDelete () {}
   }
 }
 </script>

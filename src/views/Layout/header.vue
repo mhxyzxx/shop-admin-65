@@ -36,7 +36,8 @@ export default {
           type: 'success',
           message: '退出成功！'
         })
-      }).catch(() => { // 取消
+      }).catch((err) => { // 取消
+        console.log(err)
         this.$message({
           type: 'info',
           message: '已取消退出'
