@@ -93,7 +93,11 @@
             size="mini"
             type="danger"
             @click="handleDelete(scope.row)">删除</el-button>
-          <el-button type="success" icon="el-icon-check" size="mini">分类角色</el-button>
+          <el-button
+            type="success"
+            icon="el-icon-check"
+            size="mini"
+            @click="$refs.userEditRoleEl.showEditRoleDialog(scope.row)">分类角色</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -143,6 +147,10 @@
    -->
   <UserEdit ref="userEditEl" v-on:edit-success="loadUsers"></UserEdit>
   <!-- /编辑用户对话框 -->
+
+  <!-- 编辑用户角色组件 -->
+  <UserEditRole ref="userEditRoleEl"></UserEditRole>
+  <!-- /编辑用户角色组件 -->
 </div>
 </template>
 
@@ -150,6 +158,7 @@
 // import { getUserList, addUser } from '@/api/user'
 import * as User from '@/api/user'
 import UserEdit from './edit'
+import UserEditRole from './edit-role'
 
 export default {
   name: 'UserList',
@@ -247,7 +256,8 @@ export default {
     }
   },
   components: {
-    UserEdit
+    UserEdit,
+    UserEditRole
   }
 }
 </script>
