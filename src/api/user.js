@@ -6,12 +6,13 @@ import request from '@/utils/request'
 /**
  * 获取用户列表
  */
-export const getUserList = ({ pagenum = 1, pagesize = 5 }) => request({ // const { pagenum = 1, pagesize = 5 } = 你传递的那个对象
+export const getUserList = ({ pagenum = 1, pagesize = 5, query = '' }) => request({ // const { pagenum = 1, pagesize = 5 } = 你传递的那个对象
   method: 'GET',
   url: '/users',
   params: { // 传递 GET 参数
     pagenum,
-    pagesize
+    pagesize,
+    query // query 字段用于模糊查询用户名
   }
 }).then(res => res.data)
 

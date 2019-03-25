@@ -15,9 +15,18 @@
     <!-- 操作选项 -->
     <el-row :gutter="20">
       <el-col :span="4">
+        <!--
+          el-input 是一个组件，无法直接监听原生的 click、keyup 等事件
+          如果需要监听，则必须使用 .native 修饰符
+          .native 修饰符监听组件根元素的原生事件
+
+          注意：这里将 loadUsers 作为原生事件的处理函数，一定要记得手动调用传 1，第 1 页数据
+          否则 loadUsers 的第1个参数就是事件源对象，把事件源对象当成页码去请求数据就是有问题的
+         -->
         <el-input
           placeholder="请输入内容"
-          v-model="searchText">
+          v-model="searchText"
+          @keyup.enter.native="loadUsers(1)">
           <i slot="prefix" class="el-input__icon el-icon-search"></i>
         </el-input>
       </el-col>
@@ -217,7 +226,7 @@ export default {
   methods: {
     async loadUsers (page = 1) {
       this.tableLoading = true // 开始加载 loading 效果
-      const { data } = await User.getUserList({ pagenum: page, pagesize: 5 })
+      const { data } = await User.getUserList({ pagenum: page, pagesize: 5, query: this.searchText})
       this.users = data.users
       this.total = data.total
       this.tableLoading = false // 取消 loading 效果
