@@ -36,3 +36,11 @@ export const changeState = (id, state) => request({
   method: 'PUT',
   url: `/users/${id}/state/${state}`
 }).then(res => res.data)
+
+/**
+ * 根据 id 删除用户
+ */
+export const deleteById = id => request({
+  method: 'DELETE',
+  url: `/users/${id}`
+}).then(res => res.data)

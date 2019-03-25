@@ -92,7 +92,7 @@
           <el-button
             size="mini"
             type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            @click="handleDelete(scope.row)">删除</el-button>
           <el-button type="success" icon="el-icon-check" size="mini">分类角色</el-button>
         </template>
       </el-table-column>
@@ -202,7 +202,29 @@ export default {
     },
 
     handleEdit () {},
-    handleDelete () {},
+
+    handleDelete (item) {
+      this.$confirm('确认删除吗？', '删除提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => { // 确认
+        const { data, meta } = await User.deleteById(item.id)
+        if (meta.status === 200) {
+          this.$message({
+            type: 'success',
+            message: '删除成功！'
+          })
+          this.loadUsers()
+        }
+      }).catch((err) => { // 取消
+        console.log(err)
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
 
     async handleChangeState (item) {
       const { meta, data } = await User.changeState(item.id, item.mg_state)
