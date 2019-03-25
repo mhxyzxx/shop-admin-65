@@ -28,3 +28,11 @@ export const addUser = ({ username, password, email, mobile }) => request({
     mobile
   }
 }).then(res => res.data)
+
+/**
+ * 修改用户状态
+ */
+export const changeState = (id, state) => request({
+  method: 'PUT',
+  url: `/users/${id}/state/${state}`
+}).then(res => res.data)
