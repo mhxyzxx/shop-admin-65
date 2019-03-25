@@ -10,7 +10,7 @@
       ref="addFormEl"
       :rules="formRules">
       <el-form-item label="用户名" label-width="80px" prop="username">
-        <el-input v-model="editForm.username" autocomplete="off"></el-input>
+        <el-input v-model="editForm.username" autocomplete="off" disabled></el-input>
       </el-form-item>
       <el-form-item label="邮箱" label-width="80px" prop="email">
         <el-input v-model="editForm.email" autocomplete="off"></el-input>
@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import { getById as getUserById } from '@/api/user'
+
 export default {
   name: 'UserEdit',
   data () {
@@ -50,9 +52,12 @@ export default {
   methods: {
     handleEdit () {
     },
-    showEditDialog (item) {
-      console.log(item)
-      this.fomrVisible = true
+    async showEditDialog (item) {
+      const { data, meta } = await getUserById(item.id)
+      if (meta.status === 200) {
+        this.editForm = data
+        this.fomrVisible = true // 显式弹框
+      }
     }
   }
 }

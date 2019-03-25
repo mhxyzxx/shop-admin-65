@@ -44,3 +44,11 @@ export const deleteById = id => request({
   method: 'DELETE',
   url: `/users/${id}`
 }).then(res => res.data)
+
+/**
+ * 根据 id 查询用户信息
+ */
+export const getById = id => request({
+  method: 'GET',
+  url: `/users/${id}`
+}).then(res => res.data)
