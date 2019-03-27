@@ -7,6 +7,7 @@ import Layout from '@/views/Layout'
 import Home from '@/views/Home'
 import UserList from '@/views/User'
 import RightsList from '@/views/Rights'
+import RolesList from '@/views/Roles'
 
 Vue.use(Router)
 
@@ -20,7 +21,8 @@ const router = new Router({
         // 展示 /home 的时候，先展示父路由视图，然后子路由视图展示到父路由的 router-view 出口中
         { path: '', component: Home }, // 请求父路由路径的时候，默认渲染 path 为空的这个子路由
         { path: '/users', component: UserList },
-        { path: '/rights', component: RightsList }
+        { path: '/rights', component: RightsList },
+        { path: '/roles', component: RolesList }
       ]
     }
   ]
