@@ -20,8 +20,29 @@
     stripe
     style="width: 100%">
     <el-table-column type="expand">
-      <template slot-scope="props">
-        hello world
+      <template slot-scope="scope">
+        <el-row class="first" v-for="first in scope.row.children" :key="first.id">
+          <!-- 一级 -->
+          <el-col :span="4">
+            <el-tag closable>{{ first.authName }}</el-tag>
+            <i class="el-icon-arrow-right"></i>
+          </el-col>
+
+          <!-- 二级 -->
+          <el-col :span="20">
+            <el-row class="second" v-for="second in first.children" :key="second.id">
+              <el-col :span="4">
+                <el-tag closable type="success">{{ second.authName }}</el-tag>
+                <i class="el-icon-arrow-right"></i>
+              </el-col>
+
+              <!-- 三级 -->
+              <el-col :span="20">
+                <el-tag class="third" v-for="third in second.children" :key="third.id" closable type="warning">{{ third.authName }}</el-tag>
+              </el-col>
+            </el-row>
+          </el-col>
+        </el-row>
       </template>
     </el-table-column>
     <el-table-column type="index"></el-table-column>
@@ -84,5 +105,17 @@ export default {
 <style scoped>
 .el-table {
   margin-top: 15px;
+}
+
+.first {
+  margin-bottom: 10px;
+}
+
+.second, .third {
+  margin-top: 5px;
+}
+
+.third {
+  margin-right: 5px;
 }
 </style>
