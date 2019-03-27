@@ -188,6 +188,10 @@ import UserEditRole from './edit-role'
 
 export default {
   name: 'UserList',
+  components: {
+    UserEdit,
+    UserEditRole
+  },
   data () {
     return {
       users: [],
@@ -226,7 +230,7 @@ export default {
   methods: {
     async loadUsers (page = 1) {
       this.tableLoading = true // 开始加载 loading 效果
-      const { data } = await User.getUserList({ pagenum: page, pagesize: 5, query: this.searchText})
+      const { data } = await User.getUserList({ pagenum: page, pagesize: 5, query: this.searchText })
       this.users = data.users
       this.total = data.total
       this.tableLoading = false // 取消 loading 效果
@@ -256,7 +260,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async () => { // 确认
-        const { data, meta } = await User.deleteById(item.id)
+        const { meta } = await User.deleteById(item.id)
         if (meta.status === 200) {
           this.$message({
             type: 'success',
@@ -278,14 +282,10 @@ export default {
       if (meta.status === 200) {
         this.$message({
           type: 'success',
-          message: `${data.mg_state ? '启用' : '禁用' }用户状态成功`
+          message: `${data.mg_state ? '启用' : '禁用'}用户状态成功`
         })
       }
     }
-  },
-  components: {
-    UserEdit,
-    UserEditRole
   }
 }
 </script>

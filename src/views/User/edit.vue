@@ -61,7 +61,7 @@ export default {
 
     async submitEdit () {
       const { id, email, mobile } = this.editForm
-      const { data, meta } = await updateUserById(id, {
+      const { meta } = await updateUserById(id, {
         email,
         mobile
       })
@@ -81,6 +81,7 @@ export default {
         // 谁来用，谁去决定编辑成功之后
         // 监听子组件事件：https://cn.vuejs.org/v2/guide/components.html#%E7%9B%91%E5%90%AC%E5%AD%90%E7%BB%84%E4%BB%B6%E4%BA%8B%E4%BB%B6
         this.$emit('edit-success')
+        // this.$parent 可以直接访问父组件
         this.fomrVisible = false
         this.$message({
           type: 'success',
