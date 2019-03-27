@@ -45,7 +45,7 @@ http.interceptors.request.use(function (config) {
  */
 http.interceptors.response.use(function (response) {
   console.log('4. 响应回来先经过响应拦截器，这里判断响应码是否为 401')
-  if (response.data.meta.staus === 401) {
+  if (response.data.meta.status === 401) {
     // 跳转到登录页
     // 组件的 this.$router 就是 router/index.js 中 new VueRouter 实例
     router.replace('/login')

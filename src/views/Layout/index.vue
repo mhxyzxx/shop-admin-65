@@ -10,8 +10,21 @@
       <!-- /导航组件 -->
     </el-aside>
     <el-main>
-      <!-- Layout 的 children 子路由会展示到这里 -->
-      <router-view></router-view>
+      <el-card class="box-card">
+        <!-- 卡片头部 -->
+        <div slot="header" class="clearfix">
+          <!-- 面包屑路径导航组件 -->
+          <el-breadcrumb separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+            <el-breadcrumb-item>用户列表</el-breadcrumb-item>
+          </el-breadcrumb>
+          <!-- /面包屑路径导航组件 -->
+        </div>
+        <!-- Layout 的 children 子路由会展示到这里 -->
+        <router-view></router-view>
+
+      </el-card>
     </el-main>
   </el-container>
 </el-container>
@@ -63,6 +76,10 @@ export default {
 }
 
 .el-menu {
+  height: 100%;
+}
+
+.el-card {
   height: 100%;
 }
 </style>
