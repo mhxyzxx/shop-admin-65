@@ -10,12 +10,14 @@
   </el-form>
   <div slot="footer" class="dialog-footer">
     <el-button @click="dialogFormVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+    <el-button type="primary" @click.prevent="handleSubmit">确 定</el-button>
   </div>
 </el-dialog>
 </template>
 
 <script>
+import { addRole } from '@/api/role'
+
 export default {
   name: 'RoleAdd',
   data () {
@@ -30,6 +32,15 @@ export default {
   methods: {
     showDialog () {
       this.dialogFormVisible = true
+    },
+
+    async handleSubmit () {
+      const { roleName, roleDesc } = this.form
+      const { data, meta } = await addRole({ roleName, roleDesc })
+      if (meta.status === 201) {
+        this.dialogFormVisible = false // 隐藏对话框
+        this.$emit('add-success')
+      }
     }
   }
 }

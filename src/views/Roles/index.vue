@@ -9,7 +9,17 @@
 <div>
   <el-row>
     <el-col :span="4">
-      <el-button type="primary" @click="$refs.roleAddEl.showDialog">添加角色</el-button>
+      <!--
+        这里有个大问题：调用子组件方法先必须调用一下，有问题
+       -->
+      <!-- <el-button type="primary" @click="handleAdd">添加角色</el-button> -->
+
+      <!-- 模板中访问$refs成员方法，一定要调用 -->
+      <!-- 官方文档说进来不要在模板中使用 $refs -->
+      <!-- <el-button type="primary" @click="$refs.roleAddEl.showDialog()">添加角色</el-button> -->
+
+      <!-- 这是 hack 的一种方式，直接给事件绑定了一个匿名箭头函数 -->
+      <el-button type="primary" @click="() => this.$refs.roleAddEl.showDialog()">添加角色</el-button>
     </el-col>
   </el-row>
 
@@ -75,7 +85,7 @@
   <!-- /角色列表 -->
 
   <!-- 添加角色 -->
-  <RoleAdd ref="roleAddEl" />
+  <RoleAdd ref="roleAddEl" @add-success="loadRoles" />
   <!-- /添加角色 -->
 </div>
 </template>
@@ -106,6 +116,9 @@ export default {
     },
     handleEdit () {},
     handleDelete () {},
+    handleAdd () {
+      this.$refs.roleAddEl.showDialog()
+    }
   }
 }
 </script>
