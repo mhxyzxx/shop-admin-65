@@ -78,7 +78,7 @@
         <el-button
           size="mini"
           type="warning"
-          @click="handleDelete(scope.$index, scope.row)">授权角色</el-button>
+          @click="showEditRights(scope.row)">授权角色</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -87,17 +87,23 @@
   <!-- 添加角色 -->
   <RoleAdd ref="roleAddEl" @add-success="loadRoles" />
   <!-- /添加角色 -->
+
+  <!-- 角色授权 -->
+  <RoleEditRights ref="roleEditRightsEl" />
+  <!-- /角色授权 -->
 </div>
 </template>
 
 <script>
 import { getRoleList } from '@/api/role'
 import RoleAdd from './add'
+import RoleEditRights from './edit-rights'
 
 export default {
   name: 'RolesList',
   components: {
-    RoleAdd
+    RoleAdd,
+    RoleEditRights
   },
   data () {
     return {
@@ -118,6 +124,9 @@ export default {
     handleDelete () {},
     handleAdd () {
       this.$refs.roleAddEl.showDialog()
+    },
+    showEditRights (item) {
+      this.$refs.roleEditRightsEl.showDialog(item)
     }
   }
 }
