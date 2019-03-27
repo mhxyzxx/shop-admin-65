@@ -16,6 +16,7 @@
     :data="rights"
     show-checkbox
     default-expand-all
+    :default-checked-keys="defaultChecked"
     node-key="id"
     :props="defaultProps">
   </el-tree>
@@ -34,42 +35,8 @@ export default {
   data () {
     return {
       dialogFormVisible: false,
-      rights: [],
-      data2: [{
-        id: 1,
-        label: '一级 1',
-        children: [{
-          id: 4,
-          label: '二级 1-1',
-          children: [{
-            id: 9,
-            label: '三级 1-1-1'
-          }, {
-            id: 10,
-            label: '三级 1-1-2'
-          }]
-        }]
-      }, {
-        id: 2,
-        label: '一级 2',
-        children: [{
-          id: 5,
-          label: '二级 2-1'
-        }, {
-          id: 6,
-          label: '二级 2-2'
-        }]
-      }, {
-        id: 3,
-        label: '一级 3',
-        children: [{
-          id: 7,
-          label: '二级 3-1'
-        }, {
-          id: 8,
-          label: '二级 3-2'
-        }]
-      }],
+      rights: [], // 所有权限列表
+      defaultChecked: [], // 默认选中的节点 id 数组
       defaultProps: {
         children: 'children', // 告诉 tree 你的数据中哪个字段是子节点数组
         label: 'authName' // 告诉 tree 你的数据中哪个字段是节点的文本
@@ -77,9 +44,21 @@ export default {
     }
   },
   methods: {
-    showDialog () {
+    showDialog (role) {
       this.dialogFormVisible = true
-      this.loadRights()
+      this.loadRights() // 加载所有权限列表
+      this.getRights(role.children) // 让角色的拥有的权限在权限树中被选中
+    },
+
+    getRights (roleRights) {
+      const tmp = []
+      roleRights.forEach(first => {
+        first.children.forEach(second => {
+          // 只需要三级节点的 id 就可以了，因为父级会根据子级自动选中
+          second.children.forEach(third => tmp.push(third.id))
+        })
+      })
+      this.defaultChecked = tmp
     },
 
     async loadRights () {
@@ -90,6 +69,8 @@ export default {
     },
 
     async handleSubmit () {
+      // 获取菜单树中用户选择的节点 id
+      // 提交给服务器
     }
   }
 }
