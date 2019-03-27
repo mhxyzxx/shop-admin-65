@@ -9,7 +9,7 @@
 <div>
   <el-row>
     <el-col :span="4">
-      <el-button type="primary">添加角色</el-button>
+      <el-button type="primary" @click="$refs.roleAddEl.showDialog">添加角色</el-button>
     </el-col>
   </el-row>
 
@@ -73,14 +73,22 @@
     </el-table-column>
   </el-table>
   <!-- /角色列表 -->
+
+  <!-- 添加角色 -->
+  <RoleAdd ref="roleAddEl" />
+  <!-- /添加角色 -->
 </div>
 </template>
 
 <script>
 import { getRoleList } from '@/api/role'
+import RoleAdd from './add'
 
 export default {
   name: 'RolesList',
+  components: {
+    RoleAdd
+  },
   data () {
     return {
       roles: []
