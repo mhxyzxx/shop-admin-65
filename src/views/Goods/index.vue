@@ -4,7 +4,9 @@
   <el-row :gutter="20">
     <el-col :span="4">
       <el-input
-        placeholder="请输入内容">
+        v-model="searchText"
+        placeholder="请输入内容"
+        @keyup.enter.native="loadGoods(1)">
         <i slot="prefix" class="el-input__icon el-icon-search"></i>
       </el-input>
     </el-col>
@@ -16,23 +18,40 @@
 
   <!-- 数据列表 -->
   <el-table
-    :data="tableData"
+    :data="goods"
     border
     stripe
     style="width: 100%">
+    <el-table-column type="index" label="编号" width="80">
+    </el-table-column>
     <el-table-column
-      prop="date"
-      label="日期"
+      prop="goods_name"
+      label="商品名称"
       width="180">
     </el-table-column>
     <el-table-column
-      prop="name"
-      label="姓名"
+      prop="goods_price"
+      label="商品价格"
       width="180">
     </el-table-column>
     <el-table-column
-      prop="address"
-      label="地址">
+      prop="goods_state"
+      label="商品状态">
+    </el-table-column>
+    <el-table-column
+      prop="goods_weight"
+      label="商品重量">
+    </el-table-column>
+    <el-table-column
+      prop="add_time"
+      label="创建时间">
+    </el-table-column>
+    <el-table-column
+      label="操作">
+      <template slot-scope="scope">
+        <el-button type="danger" size="mini" @click="handleDelete(scope.row)">删除</el-button>
+        <el-button type="success" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
+      </template>
     </el-table-column>
   </el-table>
   <!-- /数据列表 -->
@@ -41,35 +60,43 @@
   <el-pagination
     background
     layout="prev, pager, next"
-    :total="1000">
+    :page-size="20"
+    @current-change="loadGoods"
+    :total="goodsTotal">
   </el-pagination>
   <!-- /数据分页 -->
 </div>
 </template>
 
 <script>
+import { getGoodsList } from '@/api/goods'
+
 export default {
   name: 'GoodsList',
   data () {
     return {
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }]
+      goods: [],
+      goodsTotal: 0,
+      searchText: ''
     }
+  },
+
+  created () {
+    this.loadGoods(1)
+  },
+
+  methods: {
+    async loadGoods (page = 1) {
+      const { data, meta } = await getGoodsList({ pagenum: page, query: this.searchText })
+      if (meta.status === 200) {
+        this.goods = data.goods
+        this.goodsTotal = data.total
+      }
+    },
+
+    handleDelete () {},
+
+    handleUpdate () {}
   }
 }
 </script>
