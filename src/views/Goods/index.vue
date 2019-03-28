@@ -22,7 +22,7 @@
     border
     stripe
     style="width: 100%">
-    <el-table-column type="index" label="编号" width="80">
+    <el-table-column type="index" label="编号" width="80" :index="indexMethod">
     </el-table-column>
     <el-table-column
       prop="goods_name"
@@ -57,10 +57,14 @@
   <!-- /数据列表 -->
 
   <!-- 数据分页 -->
+  <!--
+    :current-page.sync="page" 分页组件会把当前页面同步到 page 属性
+   -->
   <el-pagination
     background
     layout="prev, pager, next"
     :page-size="20"
+    :current-page.sync="page"
     @current-change="loadGoods"
     :total="goodsTotal">
   </el-pagination>
@@ -80,7 +84,8 @@ export default {
     return {
       goods: [],
       goodsTotal: 0,
-      searchText: ''
+      searchText: '',
+      page: 1
     }
   },
 
@@ -89,6 +94,17 @@ export default {
   },
 
   methods: {
+    indexMethod (index) {
+      // console.log(index)
+      // return index + 1
+      // (2 - 1) * 20 + 0 + 1 = 21
+      // (2 - 1) * 20 + 1 + 1 = 22
+      // (2 - 1) * 20 + 2 + 1 = 23
+      //
+      // (1 - 1) * 20 + 0 + 1 = 1
+      // (1 - 1) * 20 + 1 + 1 = 2
+      return (this.page - 1) * 20 + index + 1
+    },
     async loadGoods (page = 1) {
       const { data, meta } = await getGoodsList({ pagenum: page, query: this.searchText })
       if (meta.status === 200) {

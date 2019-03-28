@@ -5,7 +5,7 @@
   @open="handleOpen"
   @close="handleClose"
   :router="true">
-  <el-submenu :index="first.id" v-for="first in menus" :key="first.id">
+  <el-submenu :index="first.path" v-for="first in menus" :key="first.id">
     <template slot="title">
       <!-- <i class="el-icon-location"></i> -->
       <i class="fas fa-user fa-lg"></i>
