@@ -5,20 +5,20 @@
   @open="handleOpen"
   @close="handleClose"
   :router="true">
-  <el-submenu index="1">
+  <el-submenu :index="first.id" v-for="first in menus" :key="first.id">
     <template slot="title">
       <!-- <i class="el-icon-location"></i> -->
       <i class="fas fa-user fa-lg"></i>
-      <span>用户管理</span>
+      <span>{{ first.authName }}</span>
     </template>
-    <el-menu-item index="/users">
+    <el-menu-item :index="`/${second.path}`" v-for="second in first.children" :key="second.id">
       <template slot="title">
         <i class="el-icon-info"></i>
-        <span>用户列表</span>
+        <span>{{ second.authName }}</span>
       </template>
     </el-menu-item>
   </el-submenu>
-  <el-submenu index="2">
+<!--   <el-submenu index="2">
     <template slot="title">
       <i class="el-icon-location"></i>
       <span>权限管理</span>
@@ -68,15 +68,22 @@
     <el-menu-item-group>
       <el-menu-item index="5-1">数据报表</el-menu-item>
     </el-menu-item-group>
-  </el-submenu>
+  </el-submenu> -->
 </el-menu>
 </template>
 
 <script>
+import { getRightsMenu } from '@/api/rights'
+
 export default {
   name: 'NavMenu',
   data () {
-    return {}
+    return {
+      menus: []
+    }
+  },
+  created () {
+    this.loadRightsMenu()
   },
   methods: {
     handleOpen (key, keyPath) {
@@ -84,6 +91,12 @@ export default {
     },
     handleClose (key, keyPath) {
       console.log(key, keyPath)
+    },
+    async loadRightsMenu () {
+      const { data, meta } = await getRightsMenu()
+      if (meta.status === 200) {
+        this.menus = data
+      }
     }
   }
 }
