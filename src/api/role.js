@@ -33,3 +33,11 @@ export const updateRightsByRoleId = (roleId, rids) => request({
     rids
   }
 }).then(res => res.data)
+
+/**
+ * 删除角色指定权限
+ */
+export const deleteRightsByRoleId = (roleId, rightId) => request({
+  method: 'DELETE',
+  url: `/roles/${roleId}/rights/${rightId}`
+}).then(res => res.data)

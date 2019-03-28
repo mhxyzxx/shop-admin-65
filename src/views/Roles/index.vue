@@ -34,7 +34,7 @@
         <el-row class="first" v-for="first in scope.row.children" :key="first.id">
           <!-- 一级 -->
           <el-col :span="4">
-            <el-tag closable>{{ first.authName }}</el-tag>
+            <el-tag closable @close="handleDeleteRights(scope.row, first)">{{ first.authName }}</el-tag>
             <i class="el-icon-arrow-right"></i>
           </el-col>
 
@@ -42,13 +42,19 @@
           <el-col :span="20">
             <el-row class="second" v-for="second in first.children" :key="second.id">
               <el-col :span="4">
-                <el-tag closable type="success">{{ second.authName }}</el-tag>
+                <el-tag closable type="success" @close="handleDeleteRights(scope.row, second)">{{ second.authName }}</el-tag>
                 <i class="el-icon-arrow-right"></i>
               </el-col>
 
               <!-- 三级 -->
               <el-col :span="20">
-                <el-tag class="third" v-for="third in second.children" :key="third.id" closable type="warning">{{ third.authName }}</el-tag>
+                <el-tag
+                  class="third"
+                  v-for="third in second.children"
+                  :key="third.id"
+                  closable
+                  type="warning"
+                  @close="handleDeleteRights(scope.row, third)">{{ third.authName }}</el-tag>
               </el-col>
             </el-row>
           </el-col>
@@ -95,7 +101,7 @@
 </template>
 
 <script>
-import { getRoleList } from '@/api/role'
+import { getRoleList, deleteRightsByRoleId } from '@/api/role'
 import RoleAdd from './add'
 import RoleEditRights from './edit-rights'
 
@@ -127,6 +133,15 @@ export default {
     },
     showEditRights (item) {
       this.$refs.roleEditRightsEl.showDialog(item)
+    },
+
+    async handleDeleteRights (role, right) {
+      const { data, meta } = await deleteRightsByRoleId(role.id, right.id)
+      if (meta.status === 200) {
+        // 删除接口会返回该用户的最新的权限列表，我们可以直接把这个 data 赋值给当前角色的权限列表
+        role.children = data
+        // this.loadRoles()
+      }
     }
   }
 }

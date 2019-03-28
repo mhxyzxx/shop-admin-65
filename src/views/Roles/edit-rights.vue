@@ -76,7 +76,7 @@ export default {
       // 获取菜单树中用户选择的节点 id
       const tree = this.$refs.tree
       const rids = [...tree.getCheckedKeys(), ...tree.getHalfCheckedKeys()].join(',')
-      const { data, meta } = await updateRightsByRoleId(this.role.id, rids)
+      const { meta } = await updateRightsByRoleId(this.role.id, rids)
       if (meta.status === 200) {
         this.$emit('edit-rights-success')
         this.dialogFormVisible = false
