@@ -1,6 +1,11 @@
 <template>
 <div class="goods-wrap">
   <!-- 操作选项 -->
+  <!--
+    数据 | 过滤器函数(参数...)
+    数据会作为第一个参数传递给过滤器
+    过滤器函数调用中的参数从第2个开始传递
+   -->
   <el-row :gutter="20">
     <el-col :span="4">
       <el-input
@@ -45,6 +50,7 @@
     <el-table-column
       prop="add_time"
       label="创建时间">
+      <template slot-scope="scope">{{ scope.row.add_time | dateFormat }}</template>
     </el-table-column>
     <el-table-column
       label="操作">
@@ -109,9 +115,9 @@ export default {
       const { data, meta } = await getGoodsList({ pagenum: page, query: this.searchText })
       if (meta.status === 200) {
         this.goods = data.goods
-        data.goods.forEach(item => {
-          item.add_time = dayjs(item.add_time).format('YYYY-MM-DD HH:mm:ss')
-        })
+        // data.goods.forEach(item => {
+        //   item.add_time = dayjs(item.add_time).format('YYYY-MM-DD HH:mm:ss')
+        // })
         this.goodsTotal = data.total
       }
     },
