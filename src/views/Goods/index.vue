@@ -70,6 +70,9 @@
 
 <script>
 import { getGoodsList } from '@/api/goods'
+import dayjs from 'dayjs' // dayjs 是一个非常轻量的时间处理库，和 moment 的 API 几乎一致
+
+console.log(dayjs(1553743663934).format('YYYY-MM-DD HH:mm:ss'))
 
 export default {
   name: 'GoodsList',
@@ -90,6 +93,9 @@ export default {
       const { data, meta } = await getGoodsList({ pagenum: page, query: this.searchText })
       if (meta.status === 200) {
         this.goods = data.goods
+        data.goods.forEach(item => {
+          item.add_time = dayjs(item.add_time).format('YYYY-MM-DD HH:mm:ss')
+        })
         this.goodsTotal = data.total
       }
     },
