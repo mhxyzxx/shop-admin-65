@@ -8,8 +8,21 @@ import Home from '@/views/Home'
 import UserList from '@/views/User'
 import RightsList from '@/views/Rights'
 import RolesList from '@/views/Roles'
+import GoodsList from '@/views/Goods'
 
 Vue.use(Router)
+
+/**
+ * 关于路由路径的设计，因为涉及到后端给出权限菜单前端需要遍历的情况
+ * 所以路由路径的设计需要前后端协商完成
+ * 包括：
+ *   导航的路径 协商
+ *   导航的名字 协商
+ *   导航的图标 协商
+ *   icon: class类名
+ *
+ * 工作中就找后端要就可以了
+ */
 
 const router = new Router({
   routes: [
@@ -22,7 +35,8 @@ const router = new Router({
         { path: '', component: Home }, // 请求父路由路径的时候，默认渲染 path 为空的这个子路由
         { path: '/users', component: UserList },
         { path: '/rights', component: RightsList },
-        { path: '/roles', component: RolesList }
+        { path: '/roles', component: RolesList },
+        { path: '/goods', component: GoodsList }
       ]
     }
   ]
