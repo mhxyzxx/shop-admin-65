@@ -40,7 +40,7 @@ import { login } from '@/api'
 import { setToken } from '@/utils/auth'
 
 export default {
-  name: 'Login',
+  name: 'AppLogin',
   data () {
     return {
       loginForm: {

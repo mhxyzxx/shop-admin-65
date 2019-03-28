@@ -22,3 +22,14 @@ export const addRole = ({ roleName, roleDesc }) => request({
     roleDesc
   }
 }).then(res => res.data)
+
+/**
+ * 更新用户权限
+ */
+export const updateRightsByRoleId = (roleId, rids) => request({
+  method: 'POST',
+  url: `/roles/${roleId}/rights`,
+  data: {
+    rids
+  }
+}).then(res => res.data)

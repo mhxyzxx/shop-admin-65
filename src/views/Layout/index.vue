@@ -35,7 +35,7 @@ import AppHeader from './header.vue'
 import NavMenu from './navmenu.vue'
 
 export default {
-  name: 'Layout',
+  name: 'AppLayout',
   data () {
     return {}
   },

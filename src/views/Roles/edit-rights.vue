@@ -14,6 +14,7 @@
    -->
   <el-tree
     :data="rights"
+    ref="tree"
     show-checkbox
     default-expand-all
     :default-checked-keys="defaultChecked"
@@ -29,6 +30,7 @@
 
 <script>
 import { getRightsList } from '@/api/rights'
+import { updateRightsByRoleId } from '@/api/role'
 
 export default {
   name: 'RoleEditRights',
@@ -40,11 +42,13 @@ export default {
       defaultProps: {
         children: 'children', // 告诉 tree 你的数据中哪个字段是子节点数组
         label: 'authName' // 告诉 tree 你的数据中哪个字段是节点的文本
-      }
+      },
+      role: {}
     }
   },
   methods: {
     showDialog (role) {
+      this.role = role
       this.dialogFormVisible = true
       this.loadRights() // 加载所有权限列表
       this.getRights(role.children) // 让角色的拥有的权限在权限树中被选中
@@ -70,7 +74,17 @@ export default {
 
     async handleSubmit () {
       // 获取菜单树中用户选择的节点 id
-      // 提交给服务器
+      const tree = this.$refs.tree
+      const rids = [...tree.getCheckedKeys(), ...tree.getHalfCheckedKeys()].join(',')
+      const { data, meta } = await updateRightsByRoleId(this.role.id, rids)
+      if (meta.status === 200) {
+        this.$emit('edit-rights-success')
+        this.dialogFormVisible = false
+        this.$message({
+          type: 'success',
+          message: '授权成功'
+        })
+      }
     }
   }
 }

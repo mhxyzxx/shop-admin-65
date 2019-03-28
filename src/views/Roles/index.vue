@@ -89,7 +89,7 @@
   <!-- /添加角色 -->
 
   <!-- 角色授权 -->
-  <RoleEditRights ref="roleEditRightsEl" />
+  <RoleEditRights ref="roleEditRightsEl" @edit-rights-success="loadRoles" />
   <!-- /角色授权 -->
 </div>
 </template>
