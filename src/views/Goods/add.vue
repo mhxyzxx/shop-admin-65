@@ -81,7 +81,25 @@
           </el-form-item>
         </el-form>
       </el-tab-pane>
-      <el-tab-pane label="商品图片">商品图片</el-tab-pane>
+      <el-tab-pane label="商品图片">
+        <!--
+          action 上传的接口地址
+            上传组件会自动去请求接口进行上传
+            由于请求不是我们发送的，所以要写完整的请求路径
+            包括接口的 token 都需要我们自己手动的配置
+          on-preview 预览成功的处理函数
+          :on-remove 删除图片的时候
+         -->
+        <el-upload
+          action="http://localhost:8888/api/private/v1/upload"
+          :headers="uploadHeaders"
+          :file-list="fileList"
+          :on-success="handleUploadSuccess"
+          list-type="picture">
+          <el-button size="small" type="primary">点击上传</el-button>
+          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+        </el-upload>
+      </el-tab-pane>
       <el-tab-pane label="商品内容">商品内容</el-tab-pane>
     </el-tabs>
     <!-- /侧边导航标签页 -->
@@ -95,11 +113,16 @@
 import { getGoodsCategoryList } from '@/api/goods-category'
 import { addGoods } from '@/api/goods'
 import { getGoodsCategoryAttrs } from '@/api/goods-category-attr'
+import { getToken } from '@/utils/auth'
 
 export default {
   name: 'GoodsAdd',
   data () {
     return {
+      uploadHeaders: { // 上传组件自定义请求头
+        Authorization: getToken()
+      },
+      fileList: [], // 图片列表
       formData: {
         goods_name: '',
         goods_price: '',
@@ -130,6 +153,9 @@ export default {
       }
     },
 
+    /**
+     * 添加商品提交
+     */
     async handleSubmit () {
       const {
         goods_name,
@@ -159,13 +185,23 @@ export default {
       // 将商品属性和商品参数合并为一个数组提交给接口
       const attrs = [...categoryAttrs, ...categoryParams]
 
+      // 处理商品的图片
+      const pics = this.fileList.map(item => {
+        const a = document.createElement('a')
+        a.href = item.url
+        return {
+          pic: a.pathname // 图片的服务端访问路径
+        }
+      })
+
       const { data, meta } = await addGoods({
         goods_name,
         goods_cat: goods_cat.join(','), // 接口要求商品分类传递一个以 , 分割的字符串列表
         goods_price,
         goods_number,
         goods_weight,
-        attrs
+        attrs,
+        pics
       })
 
       if (meta.status === 201) {
@@ -177,8 +213,12 @@ export default {
       }
     },
 
+    /**
+     * 标签页改变处理
+     */
     handleTabChange (currentTab) {
-      if (currentTab.label === '商品参数' || '商品属性') {
+      const { label } = currentTab
+      if (label === '商品参数' || label === '商品属性') {
         // 根据在第一个 tab 选中的分类 id 动态请求加载商品参数
         const { goods_cat } = this.formData
         if (goods_cat.length === 0) {
@@ -220,6 +260,26 @@ export default {
       if (meta.status === 200) {
         this.goodsCategoryParams = data
       }
+    },
+
+    /**
+     * 图片上传成功处理函数
+     * response 是上传请求的响应结果数据
+     * file 是上传的那个文件的信息对象
+     * fileList 是存储文件信息的列表数据
+     */
+    handleUploadSuccess (response, file, fileList) {
+      console.log('response => ', response)
+      console.log('file => ', file)
+      console.log('fileList => ', fileList)
+
+      // fileList 用于默认被展示的图片列表
+      // 我们将上传成功的图片信息存储到这个数组中
+      // 之后需要提交给添加商品接口
+      this.fileList.push({
+        name: file.name, // 接口要求名字叫 pic
+        url: `http://localhost:8888/${response.data.tmp_path}`
+      })
     }
   }
 }
