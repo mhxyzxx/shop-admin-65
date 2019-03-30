@@ -1,7 +1,7 @@
 <template>
   <div class="goods-add-wrap">
     <!-- 步骤条 -->
-    <el-steps :active="active" finish-status="success">
+    <el-steps finish-status="success">
       <el-step title="步骤 1"></el-step>
       <el-step title="步骤 2"></el-step>
       <el-step title="步骤 3"></el-step>
@@ -69,6 +69,7 @@
 
 <script>
 import { getGoodsCategoryList } from '@/api/goods-category'
+import { addGoods } from '@/api/goods'
 
 export default {
   name: 'GoodsAdd',
@@ -98,7 +99,30 @@ export default {
       }
     },
 
-    handleSubmit () {}
+    async handleSubmit () {
+      const {
+        goods_name,
+        goods_cat,
+        goods_price,
+        goods_number,
+        goods_weight } = this.formData
+
+      const { data, meta } = await addGoods({
+        goods_name,
+        goods_cat: goods_cat.join(','), // 接口要求商品分类传递一个以 , 分割的字符串列表
+        goods_price,
+        goods_number,
+        goods_weight
+      })
+
+      if (meta.status === 201) {
+        this.$router.replace('/goods')
+        this.$message({
+          type: 'success',
+          message: '添加成功'
+        })
+      }
+    }
   }
 }
 </script>
