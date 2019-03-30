@@ -52,16 +52,12 @@
               <el-radio :label="false">否</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click.prevent="handleSubmit">保存</el-button>
-            <el-button>取消</el-button>
-          </el-form-item>
         </el-form>
       </el-tab-pane>
       <el-tab-pane label="商品参数">
-        <el-row v-for="attr in goodsCategoryAttrs" :key="attr.attr_id">
-          <el-col :span="4">{{ attr.attr_name }}</el-col>
-          <el-col :span="20">
+        <el-row class="attr-row" v-for="attr in goodsCategoryAttrs" :key="attr.attr_id">
+          <el-col :span="2">{{ attr.attr_name }}</el-col>
+          <el-col :span="22">
             <!--
               1. 它里面可以得到选中的多个节点的 value
             -->
@@ -79,6 +75,9 @@
       <el-tab-pane label="商品内容">商品内容</el-tab-pane>
     </el-tabs>
     <!-- /侧边导航标签页 -->
+
+    <el-button type="primary" @click.prevent="handleSubmit">保存</el-button>
+    <el-button>取消</el-button>
   </div>
 </template>
 
@@ -128,12 +127,22 @@ export default {
         goods_number,
         goods_weight } = this.formData
 
+      const attrs = this.goodsCategoryAttrs
+        .map(attr => {
+          return {
+            attr_id: attr.attr_id,
+            attr_value: attr.attr_selected_vals.join(',')
+          }
+        })
+        .filter(attr => attr.attr_value.length > 0)
+
       const { data, meta } = await addGoods({
         goods_name,
         goods_cat: goods_cat.join(','), // 接口要求商品分类传递一个以 , 分割的字符串列表
         goods_price,
         goods_number,
-        goods_weight
+        goods_weight,
+        attrs
       })
 
       if (meta.status === 201) {
@@ -179,5 +188,9 @@ export default {
 .el-tabs {
   margin-left: -20px;
   margin-top: 20px;
+}
+
+.attr-row {
+  margin-bottom: 15px;
 }
 </style>

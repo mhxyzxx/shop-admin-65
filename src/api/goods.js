@@ -20,7 +20,7 @@ export const getGoodsList = ({ query = '', pagenum = 1, pagesize = 20 } = {}) =>
 /**
  * 添加商品
  */
-export const addGoods = ({ goods_name, goods_cat, goods_price, goods_number, goods_weight }) => request({
+export const addGoods = ({ goods_name, goods_cat, goods_price, goods_number, goods_weight, attrs = [] }) => request({
   method: 'POST',
   url: '/goods',
   data: { // POST 参数
@@ -28,6 +28,7 @@ export const addGoods = ({ goods_name, goods_cat, goods_price, goods_number, goo
     goods_cat,
     goods_price,
     goods_number,
-    goods_weight
+    goods_weight,
+    attrs
   }
 }).then(res => res.data)
