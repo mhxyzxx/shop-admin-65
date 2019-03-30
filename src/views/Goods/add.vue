@@ -30,10 +30,21 @@
             <el-input v-model.number="formData.goods_number"></el-input>
           </el-form-item>
           <el-form-item label="商品分类">
-            <el-select v-model="formData.region" placeholder="请选择活动区域">
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
-            </el-select>
+            <!--
+              级联选择器
+              options 数据（树结构的数据）
+              v-model 选中的节点的id数组，会同步到指定的数据上
+              change 选中节点改变事件
+             -->
+            <el-cascader
+              :options="goodsCategories"
+              :props="{
+                value: 'cat_id',
+                label: 'cat_name',
+                children: 'children'
+              }"
+              v-model="formData.goods_cat">
+            </el-cascader>
           </el-form-item>
           <el-form-item label="是否促销">
             <el-radio-group v-model="formData.is_promote">
@@ -42,7 +53,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="onSubmit">保存</el-button>
+            <el-button type="primary" @click.prevent="handleSubmit">保存</el-button>
             <el-button>取消</el-button>
           </el-form-item>
         </el-form>
@@ -57,6 +68,8 @@
 </template>
 
 <script>
+import { getGoodsCategoryList } from '@/api/goods-category'
+
 export default {
   name: 'GoodsAdd',
   data () {
@@ -66,10 +79,26 @@ export default {
         goods_price: '',
         goods_weight: '',
         goods_number: '',
-        region: '',
+        goods_cat: [],
         is_promote: ''
-      }
+      },
+      goodsCategories: [] // 所有商品分列表（树格式）
     }
+  },
+
+  created () {
+    this.loadGoodsCategories()
+  },
+
+  methods: {
+    async loadGoodsCategories () {
+      const { data, meta } = await  getGoodsCategoryList()
+      if (meta.status === 200) {
+        this.goodsCategories = data
+      }
+    },
+
+    handleSubmit () {}
   }
 }
 </script>
