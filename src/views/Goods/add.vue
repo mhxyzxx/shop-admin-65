@@ -70,7 +70,17 @@
           </el-col>
         </el-row>
       </el-tab-pane>
-      <el-tab-pane label="商品属性">商品属性</el-tab-pane>
+      <el-tab-pane label="商品属性">
+        <!--
+          :model="formLabelAlign"
+          :model="formLabelAlign"
+         -->
+        <el-form label-width="150px" >
+          <el-form-item :label="item.attr_name" v-for="item in goodsCategoryParams" :key="item.attr_id">
+            <el-input v-model="item.attr_vals"></el-input>
+          </el-form-item>
+        </el-form>
+      </el-tab-pane>
       <el-tab-pane label="商品图片">商品图片</el-tab-pane>
       <el-tab-pane label="商品内容">商品内容</el-tab-pane>
     </el-tabs>
