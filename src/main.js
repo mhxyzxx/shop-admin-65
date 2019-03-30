@@ -17,7 +17,7 @@ Vue.use(ElementUI)
  * 参考文档：https://cn.vuejs.org/v2/guide/filters.html
  * 适用于在模板中需要对数据进行格式化输出的时候，而不影响原来的数据
  * 常见的：日期格式化、字母转大写、字母转小写
- * 也支持私有过滤器
+ * 也支持私有过滤器（组件内的 filter 选项）
  * <h1>{{ 1553746037397 | dateFormat('YYYY-MM-DD') }}</h1>
   <h1>{{ 'hello' | uppercase }}</h1>
   <h1>{{ 'Hello' | lowercase }}</h1>

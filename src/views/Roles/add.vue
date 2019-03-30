@@ -36,7 +36,7 @@ export default {
 
     async handleSubmit () {
       const { roleName, roleDesc } = this.form
-      const { data, meta } = await addRole({ roleName, roleDesc })
+      const { meta } = await addRole({ roleName, roleDesc })
       if (meta.status === 201) {
         this.dialogFormVisible = false // 隐藏对话框
         this.$emit('add-success')

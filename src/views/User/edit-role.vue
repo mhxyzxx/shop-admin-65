@@ -20,6 +20,7 @@
           <el-option :value="-1" label="请选择"></el-option>
           <el-option
             v-for="item in roles"
+            :key="item.id"
             :label="item.roleName"
             :value="item.id">
           </el-option>
@@ -63,7 +64,7 @@ export default {
   methods: {
     async handleEditRole () {
       const { id: userId, rid: roleId } = this.editForm
-      const { meta, data } = await updateUserRoleByUserId(userId, roleId)
+      const { meta } = await updateUserRoleByUserId(userId, roleId)
       if (meta.status === 200) {
         // 关闭对话框
         this.fomrVisible = false
@@ -85,6 +86,11 @@ export default {
         this.roles = roleData
       }
     }
+  },
+  filter: {
+    // 名字 () {
+
+    // }
   }
 }
 </script>

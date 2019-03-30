@@ -113,7 +113,8 @@
     layout="prev, pager, next"
     :total="total"
     @current-change="loadUsers"
-    :page-size="5">
+    :page-size="5"
+    :current-page.sync="page">
   </el-pagination>
   <!-- /分页组件 -->
 
@@ -205,7 +206,8 @@ export default {
           { required: true, message: '请输入电话', trigger: 'blur' }
         ]
       },
-      total: 0
+      total: 0,
+      page: 1
     }
   },
   async created () {
@@ -253,7 +255,10 @@ export default {
             type: 'success',
             message: '删除成功！'
           })
-          this.loadUsers()
+
+          // this.page 就是当前页面
+          // 当前页面会和分页组件的页码保持同步
+          this.loadUsers(this.page)
         }
       }).catch((err) => { // 取消
         console.log(err)
