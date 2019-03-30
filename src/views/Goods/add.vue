@@ -11,7 +11,7 @@
     <!-- /步骤条 -->
 
     <!-- 侧边导航标签页 -->
-    <el-tabs tab-position="left">
+    <el-tabs tab-position="left" @tab-click="handleTabChange">
       <el-tab-pane label="基本信息">
         <el-form ref="form" :model="formData" label-width="80px">
           <el-form-item label="商品名称">
@@ -70,6 +70,7 @@
 <script>
 import { getGoodsCategoryList } from '@/api/goods-category'
 import { addGoods } from '@/api/goods'
+import { getGoodsCategoryAttrs } from '@/api/goods-category-attr'
 
 export default {
   name: 'GoodsAdd',
@@ -83,7 +84,8 @@ export default {
         goods_cat: [],
         is_promote: ''
       },
-      goodsCategories: [] // 所有商品分列表（树格式）
+      goodsCategories: [], // 所有商品分列表（树格式）
+      goodsCategoryAttrs: [] // 所选择分类的参数数据
     }
   },
 
@@ -121,6 +123,31 @@ export default {
           type: 'success',
           message: '添加成功'
         })
+      }
+    },
+
+    handleTabChange (currentTab) {
+      if (currentTab.label === '商品参数') {
+        // 根据在第一个 tab 选中的分类 id 动态请求加载商品参数
+        const { goods_cat } = this.formData
+        if (goods_cat.length === 0) {
+          return this.$message({
+            type: 'warning',
+            message: '请选择商品分类'
+          })
+        }
+
+        // 如果用户选择了商品分类，则动态就加载分类参数
+        this.loadGoodsCategoryAttrs()
+      }
+    },
+
+    async loadGoodsCategoryAttrs () {
+      const { goods_cat } = this.formData
+      const { data, meta } = await getGoodsCategoryAttrs(goods_cat[goods_cat.length - 1])
+      if (meta.status === 200) {
+        console.log(123)
+        this.goodsCategoryAttrs = data
       }
     }
   }
