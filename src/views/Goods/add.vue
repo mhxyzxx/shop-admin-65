@@ -103,7 +103,8 @@ export default {
         '55吋4K观影曲面 30核HDR'
       ],
       goodsCategories: [], // 所有商品分列表（树格式）
-      goodsCategoryAttrs: [] // 所选择分类的参数数据
+      goodsCategoryAttrs: [], // 商品属性
+      goodsCategoryParams: [] // 商品参数
     }
   },
 
@@ -155,7 +156,7 @@ export default {
     },
 
     handleTabChange (currentTab) {
-      if (currentTab.label === '商品参数') {
+      if (currentTab.label === '商品参数' || '商品属性') {
         // 根据在第一个 tab 选中的分类 id 动态请求加载商品参数
         const { goods_cat } = this.formData
         if (goods_cat.length === 0) {
@@ -164,12 +165,19 @@ export default {
             message: '请选择商品分类'
           })
         }
+      }
 
+      if (currentTab.label === '商品参数') {
         // 如果用户选择了商品分类，则动态就加载分类参数
         this.loadGoodsCategoryAttrs()
+      } else if (currentTab.label === '商品属性') {
+        this.loadGoodsCategoryParams()
       }
     },
 
+    /**
+     * 加载商品属性
+     */
     async loadGoodsCategoryAttrs () {
       const { goods_cat } = this.formData
       const { data, meta } = await getGoodsCategoryAttrs(goods_cat[goods_cat.length - 1])
@@ -178,6 +186,17 @@ export default {
           attr.attr_selected_vals = attr.attr_vals.split(',')
         })
         this.goodsCategoryAttrs = data
+      }
+    },
+
+    /**
+     * 加载商品参数
+     */
+    async loadGoodsCategoryParams () {
+      const { goods_cat } = this.formData
+      const { data, meta } = await getGoodsCategoryAttrs(goods_cat[goods_cat.length - 1], 'only')
+      if (meta.status === 200) {
+        this.goodsCategoryParams = data
       }
     }
   }
