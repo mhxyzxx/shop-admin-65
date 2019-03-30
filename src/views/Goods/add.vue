@@ -138,7 +138,8 @@ export default {
         goods_number,
         goods_weight } = this.formData
 
-      const attrs = this.goodsCategoryAttrs
+      // 处理商品属性
+      const categoryAttrs = this.goodsCategoryAttrs
         .map(attr => {
           return {
             attr_id: attr.attr_id,
@@ -146,6 +147,17 @@ export default {
           }
         })
         .filter(attr => attr.attr_value.length > 0)
+
+      // 处理商品参数
+      const categoryParams = this.goodsCategoryParams.map(attr => {
+        return {
+          attr_id: attr.attr_id,
+          attr_value: attr.attr_vals
+        }
+      })
+
+      // 将商品属性和商品参数合并为一个数组提交给接口
+      const attrs = [...categoryAttrs, ...categoryParams]
 
       const { data, meta } = await addGoods({
         goods_name,
