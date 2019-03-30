@@ -58,7 +58,22 @@
           </el-form-item>
         </el-form>
       </el-tab-pane>
-      <el-tab-pane label="商品参数">商品参数</el-tab-pane>
+      <el-tab-pane label="商品参数">
+        <el-row v-for="attr in goodsCategoryAttrs" :key="attr.attr_id">
+          <el-col :span="4">{{ attr.attr_name }}</el-col>
+          <el-col :span="20">
+            <!--
+              1. 它里面可以得到选中的多个节点的 value
+            -->
+            <el-checkbox-group v-model="attr.attr_selected_vals" size="small">
+              <el-checkbox
+                :label="val"
+                border
+                v-for="val in attr.attr_vals.split(',')"></el-checkbox>
+            </el-checkbox-group>
+          </el-col>
+        </el-row>
+      </el-tab-pane>
       <el-tab-pane label="商品属性">商品属性</el-tab-pane>
       <el-tab-pane label="商品图片">商品图片</el-tab-pane>
       <el-tab-pane label="商品内容">商品内容</el-tab-pane>
@@ -84,6 +99,10 @@ export default {
         goods_cat: [],
         is_promote: ''
       },
+      checkboxGroup5: [
+        '49吋4K超薄曲面 人工智能',
+        '55吋4K观影曲面 30核HDR'
+      ],
       goodsCategories: [], // 所有商品分列表（树格式）
       goodsCategoryAttrs: [] // 所选择分类的参数数据
     }
@@ -146,7 +165,9 @@ export default {
       const { goods_cat } = this.formData
       const { data, meta } = await getGoodsCategoryAttrs(goods_cat[goods_cat.length - 1])
       if (meta.status === 200) {
-        console.log(123)
+        data.forEach(attr => {
+          attr.attr_selected_vals = attr.attr_vals.split(',')
+        })
         this.goodsCategoryAttrs = data
       }
     }
