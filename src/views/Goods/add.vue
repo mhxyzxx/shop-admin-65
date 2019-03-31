@@ -117,6 +117,7 @@ import { getGoodsCategoryList } from '@/api/goods-category'
 import { addGoods } from '@/api/goods'
 import { getGoodsCategoryAttrs } from '@/api/goods-category-attr'
 import { getToken } from '@/utils/auth'
+import { upload } from '@/api'
 
 export default {
   name: 'GoodsAdd',
@@ -158,6 +159,32 @@ export default {
     // 操作 DOM 初始化富文本编辑器
     // this.$refs.editor 就是编辑器容器 DOM 节点
     var editor = new E(this.$refs.editor)
+
+    // 配置服务器端地址
+    editor.customConfig.uploadImgServer = 'http://localhost:8888/api/private/v1/upload'
+
+    editor.customConfig.customUploadImg = async (files, insert) => {
+      // files 是 input 中选中的文件列表
+      // insert 是获取图片 url 后，插入到编辑器的方法
+
+      const { data, meta } = await upload(files)
+      if (meta.status === 200) {
+        insert(`http://localhost:8888/${data.tmp_path}`)
+      }
+
+      // 上传代码返回结果之后，将图片插入到编辑器中
+      // 调用该方法，生成 img 标签，src 指向传递的 imgUrl
+      // imgUrl？是上传到服务器的服务端图片访问路径，一个 Web 访问路径 http://xxxx.jpg
+      // insert('http://img.redocn.com/201808/20180817/20180817_3beb7f1d22ca9c33139biwRzfgXcizir.png')
+    }
+
+    // // 自定义 fileName
+    // editor.customConfig.uploadFileName = 'file'
+
+    // // 配置请求上传自定义请求头：添加 token
+    // editor.customConfig.uploadImgHeaders = {
+    //   Authorization: getToken()
+    // }
 
     // 当编辑器中的内容发生改变的时候，将数据同步到了 Vue 组件中的  formData.goods_introduce 中了
     editor.customConfig.onchange = (html) => {
