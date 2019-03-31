@@ -100,7 +100,9 @@
           <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
         </el-upload>
       </el-tab-pane>
-      <el-tab-pane label="商品内容">商品内容</el-tab-pane>
+      <el-tab-pane label="商品内容">
+        <div ref="editor" style="text-align:left"></div>
+      </el-tab-pane>
     </el-tabs>
     <!-- /侧边导航标签页 -->
 
@@ -110,6 +112,7 @@
 </template>
 
 <script>
+import E from 'wangeditor' // 富文本编辑器
 import { getGoodsCategoryList } from '@/api/goods-category'
 import { addGoods } from '@/api/goods'
 import { getGoodsCategoryAttrs } from '@/api/goods-category-attr'
@@ -129,7 +132,8 @@ export default {
         goods_weight: '',
         goods_number: '',
         goods_cat: [],
-        is_promote: ''
+        is_promote: '', // 是否促销
+        goods_introduce: '' // 商品介绍
       },
       checkboxGroup5: [
         '49吋4K超薄曲面 人工智能',
@@ -143,6 +147,25 @@ export default {
 
   created () {
     this.loadGoodsCategories()
+  },
+
+  /**
+   * 凡是涉及到在初始化的时候需要操作 DOM 的时候，必须写到 mounted 中
+   * 因为被 Vue 管理的模板只有在 mounted 挂载完成之后才可以获取到 DOM
+   * 记住：只有 mounted 挂载完成之后，才可以通过 this.$refs.xxx 获取到 DOM 元素
+   */
+  mounted() {
+    // 操作 DOM 初始化富文本编辑器
+    // this.$refs.editor 就是编辑器容器 DOM 节点
+    var editor = new E(this.$refs.editor)
+
+    // 当编辑器中的内容发生改变的时候，将数据同步到了 Vue 组件中的  formData.goods_introduce 中了
+    editor.customConfig.onchange = (html) => {
+      this.formData.goods_introduce = html
+    }
+
+    // 创建生成
+    editor.create()
   },
 
   methods: {
@@ -162,7 +185,7 @@ export default {
         goods_cat,
         goods_price,
         goods_number,
-        goods_weight } = this.formData
+        goods_weight, goods_introduce } = this.formData
 
       // 处理商品属性
       const categoryAttrs = this.goodsCategoryAttrs
@@ -201,7 +224,8 @@ export default {
         goods_number,
         goods_weight,
         attrs,
-        pics
+        pics,
+        goods_introduce
       })
 
       if (meta.status === 201) {
