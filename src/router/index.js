@@ -10,6 +10,7 @@ import RightsList from '@/views/Rights'
 import RolesList from '@/views/Roles'
 import GoodsList from '@/views/Goods'
 import GoodsAdd from '@/views/Goods/add'
+import GoodsCategory from '@/views/GoodsCategory'
 
 Vue.use(Router)
 
@@ -38,7 +39,8 @@ const router = new Router({
         { path: '/rights', component: RightsList },
         { path: '/roles', component: RolesList },
         { path: '/goods', component: GoodsList },
-        { path: '/toadd', component: GoodsAdd }
+        { path: '/toadd', component: GoodsAdd },
+        { path: '/categories', component: GoodsCategory }
       ]
     }
   ]
