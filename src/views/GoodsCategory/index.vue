@@ -2,7 +2,7 @@
 <div>
   <el-row>
     <el-col :span="4">
-      <el-button type="primary">添加分类</el-button>
+      <el-button type="primary" @click="showAdd">添加分类</el-button>
     </el-col>
   </el-row>
 
@@ -15,6 +15,7 @@
    -->
   <el-table
     :data="goodsCategories"
+    v-loading="loading"
     style="width: 100%;margin-bottom: 20px;"
     border
     row-key="cat_id">
@@ -46,17 +47,26 @@
     </el-table-column>
   </el-table>
   <!-- /列表数据 -->
+
+  <!-- 添加分类 -->
+  <CategoryAdd ref="categoryAddEl" @add-success="loadGoodsCategories" />
+  <!-- /添加分类 -->
 </div>
 </template>
 
 <script>
 import { getGoodsCategoryList } from '@/api/goods-category'
+import CategoryAdd from './add'
 
 export default {
   name: 'GoodsCategory',
+  components: {
+    CategoryAdd
+  },
   data () {
     return {
-      goodsCategories: []
+      goodsCategories: [],
+      loading: true
     }
   },
 
@@ -66,10 +76,16 @@ export default {
 
   methods: {
     async loadGoodsCategories () {
+      this.loading = true
       const { data, meta } = await getGoodsCategoryList()
       if (meta.status === 200) {
         this.goodsCategories = data
+        this.loading = false
       }
+    },
+
+    showAdd () {
+      this.$refs.categoryAddEl.show()
     }
   }
 }
