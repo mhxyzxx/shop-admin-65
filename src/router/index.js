@@ -11,6 +11,8 @@ import RolesList from '@/views/Roles'
 import GoodsList from '@/views/Goods'
 import GoodsAdd from '@/views/Goods/add'
 import GoodsCategory from '@/views/GoodsCategory'
+import OrderList from '@/views/Orders'
+import EchartsDemo from '@/views/EchartsDemo'
 
 Vue.use(Router)
 
@@ -40,7 +42,9 @@ const router = new Router({
         { path: '/roles', component: RolesList },
         { path: '/goods', component: GoodsList },
         { path: '/toadd', component: GoodsAdd },
-        { path: '/categories', component: GoodsCategory }
+        { path: '/categories', component: GoodsCategory },
+        { path: '/orders', component: OrderList },
+        { path: '/echarts', component: EchartsDemo }
       ]
     }
   ]
