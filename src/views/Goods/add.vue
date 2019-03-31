@@ -1,7 +1,7 @@
 <template>
   <div class="goods-add-wrap">
     <!-- 步骤条 -->
-    <el-steps finish-status="success">
+    <el-steps finish-status="success" :active="activeStep">
       <el-step title="步骤 1"></el-step>
       <el-step title="步骤 2"></el-step>
       <el-step title="步骤 3"></el-step>
@@ -101,7 +101,21 @@
         </el-upload>
       </el-tab-pane>
       <el-tab-pane label="商品内容">
-        <div ref="editor" style="text-align:left"></div>
+        <!-- <RichTextEditor @editor-change="handleEditorChange" /> -->
+
+        <!--
+          在模板中的 $event 表示事件参数，固定的语法
+         -->
+        <!-- <RichTextEditor
+          v-bind:content="formData.goods_introduce"
+          v-on:update="formData.goods_introduce = $event" /> -->
+
+        <!--
+          .sync 修饰符
+          自动根据 v-bind 的属性名监听一个叫 update:属性名 的事件
+          然后事件触发以后，它自动 formData.goods_introduce = 事件参数
+         -->
+        <RichTextEditor :content.sync="formData.goods_introduce" />
       </el-tab-pane>
     </el-tabs>
     <!-- /侧边导航标签页 -->
@@ -112,17 +126,20 @@
 </template>
 
 <script>
-import E from 'wangeditor' // 富文本编辑器
 import { getGoodsCategoryList } from '@/api/goods-category'
 import { addGoods } from '@/api/goods'
 import { getGoodsCategoryAttrs } from '@/api/goods-category-attr'
 import { getToken } from '@/utils/auth'
-import { upload } from '@/api'
+import RichTextEditor from '@/components/RichTextEditor'
 
 export default {
   name: 'GoodsAdd',
+  components: {
+    RichTextEditor
+  },
   data () {
     return {
+      activeStep: 0, // 激活的 step 步骤
       uploadHeaders: { // 上传组件自定义请求头
         Authorization: getToken()
       },
@@ -148,51 +165,6 @@ export default {
 
   created () {
     this.loadGoodsCategories()
-  },
-
-  /**
-   * 凡是涉及到在初始化的时候需要操作 DOM 的时候，必须写到 mounted 中
-   * 因为被 Vue 管理的模板只有在 mounted 挂载完成之后才可以获取到 DOM
-   * 记住：只有 mounted 挂载完成之后，才可以通过 this.$refs.xxx 获取到 DOM 元素
-   */
-  mounted() {
-    // 操作 DOM 初始化富文本编辑器
-    // this.$refs.editor 就是编辑器容器 DOM 节点
-    var editor = new E(this.$refs.editor)
-
-    // 配置服务器端地址
-    editor.customConfig.uploadImgServer = 'http://localhost:8888/api/private/v1/upload'
-
-    editor.customConfig.customUploadImg = async (files, insert) => {
-      // files 是 input 中选中的文件列表
-      // insert 是获取图片 url 后，插入到编辑器的方法
-
-      const { data, meta } = await upload(files)
-      if (meta.status === 200) {
-        insert(`http://localhost:8888/${data.tmp_path}`)
-      }
-
-      // 上传代码返回结果之后，将图片插入到编辑器中
-      // 调用该方法，生成 img 标签，src 指向传递的 imgUrl
-      // imgUrl？是上传到服务器的服务端图片访问路径，一个 Web 访问路径 http://xxxx.jpg
-      // insert('http://img.redocn.com/201808/20180817/20180817_3beb7f1d22ca9c33139biwRzfgXcizir.png')
-    }
-
-    // // 自定义 fileName
-    // editor.customConfig.uploadFileName = 'file'
-
-    // // 配置请求上传自定义请求头：添加 token
-    // editor.customConfig.uploadImgHeaders = {
-    //   Authorization: getToken()
-    // }
-
-    // 当编辑器中的内容发生改变的时候，将数据同步到了 Vue 组件中的  formData.goods_introduce 中了
-    editor.customConfig.onchange = (html) => {
-      this.formData.goods_introduce = html
-    }
-
-    // 创建生成
-    editor.create()
   },
 
   methods: {
@@ -268,6 +240,10 @@ export default {
      * 标签页改变处理
      */
     handleTabChange (currentTab) {
+      // ECMAScript 6 将原来的一些全局函数 parseInt 归纳到了 Number 对象模块中
+      // 推荐调用这个成员的时候加上 Number
+      // 它的目的是为了让其语法更模块化
+      this.activeStep = Number.parseInt(currentTab.index)
       const { label } = currentTab
       if (label === '商品参数' || label === '商品属性') {
         // 根据在第一个 tab 选中的分类 id 动态请求加载商品参数
@@ -331,6 +307,10 @@ export default {
         name: file.name, // 接口要求名字叫 pic
         url: `http://localhost:8888/${response.data.tmp_path}`
       })
+    },
+
+    handleEditorChange (editorContent) {
+      this.formData.goods_introduce = editorContent
     }
   }
 }
