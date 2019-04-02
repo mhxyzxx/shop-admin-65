@@ -1,9 +1,10 @@
 <template>
 <el-menu
-  default-active="2"
+  :default-active="$route.path"
   class="el-menu-vertical-demo"
   @open="handleOpen"
   @close="handleClose"
+  @select="handleMenuSelect"
   :router="true">
   <el-submenu :index="first.path" v-for="first in menus" :key="first.id">
     <template slot="title">
@@ -82,8 +83,13 @@ export default {
       menus: []
     }
   },
-  created () {
-    this.loadRightsMenu()
+  async created () {
+    await this.loadRightsMenu()
+    // console.log(this.$route)
+
+    // 默认一上来就手动的 select 一下
+    // 路径来自于路由路径
+    this.handleMenuSelect(this.$route.path)
   },
   methods: {
     handleOpen (key, keyPath) {
@@ -97,6 +103,22 @@ export default {
       if (meta.status === 200) {
         this.menus = data
       }
+    },
+    handleMenuSelect (index) {
+      const secondPath = index.substr(1)
+      // 根据二级路径找到一级
+      this.menus.forEach(first => {
+
+        // find 会遍历数据，将符合 second.path === secondPath 条件的元素返回
+        const second = first.children.find(second => {
+          return second.path === secondPath
+        })
+
+        if (second) { // 如果找到 second
+          // console.log(first.authName, second.authName)
+          this.$emit('menu-select', [first.authName, second.authName])
+        }
+      })
     }
   }
 }

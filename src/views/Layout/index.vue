@@ -6,7 +6,7 @@
   <el-container>
     <el-aside width="200px">
       <!-- 导航组件 -->
-      <NavMenu></NavMenu>
+      <NavMenu @menu-select="handleMenuSelect"></NavMenu>
       <!-- /导航组件 -->
     </el-aside>
     <el-main>
@@ -16,8 +16,8 @@
           <!-- 面包屑路径导航组件 -->
           <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-            <el-breadcrumb-item>用户列表</el-breadcrumb-item>
+            <el-breadcrumb-item v-for="(item, index) in breadNames" :key="index">{{ item }}</el-breadcrumb-item>
+            <!-- <el-breadcrumb-item>用户列表</el-breadcrumb-item> -->
           </el-breadcrumb>
           <!-- /面包屑路径导航组件 -->
         </div>
@@ -37,9 +37,15 @@ import NavMenu from './navmenu.vue'
 export default {
   name: 'AppLayout',
   data () {
-    return {}
+    return {
+      breadNames: []
+    }
   },
   methods: {
+    handleMenuSelect (names) {
+      // console.log(names)
+      this.breadNames = names
+    }
   },
   components: {
     AppHeader,
