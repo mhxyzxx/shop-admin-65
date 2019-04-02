@@ -21,7 +21,7 @@ export default {
    * 因为被 Vue 管理的模板只有在 mounted 挂载完成之后才可以获取到 DOM
    * 记住：只有 mounted 挂载完成之后，才可以通过 this.$refs.xxx 获取到 DOM 元素
    */
-  mounted() {
+  mounted () {
     // 操作 DOM 初始化富文本编辑器
     // this.$refs.editor 就是编辑器容器 DOM 节点
     var editor = new E(this.$refs.editor)
@@ -69,7 +69,7 @@ export default {
 
     // 创建生成
     editor.create()
-  },
+  }
 }
 </script>
 

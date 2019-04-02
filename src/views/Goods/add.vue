@@ -169,7 +169,7 @@ export default {
 
   methods: {
     async loadGoodsCategories () {
-      const { data, meta } = await  getGoodsCategoryList()
+      const { data, meta } = await getGoodsCategoryList()
       if (meta.status === 200) {
         this.goodsCategories = data
       }
