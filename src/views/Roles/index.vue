@@ -24,6 +24,17 @@
   </el-row>
 
   <!-- 角色列表 -->
+  <!--
+    Error in callback for watcher "data": "Error: if there's nested data, rowKey is required."
+    2.7 版本中升级了一个新的功能：支持表格树
+    当你使用表格的时候，表格组件会自动检查你的数据是否是嵌套数据（树结构），从而自动进行表格树渲染
+    它的依据就是你的数据中的子节点名字：children
+    也就是说它发现你的数据是树结构数据，所以它要按照表格树的方式进行渲染
+    如果要渲染成表格树，它需要提供 row-key
+
+    目前它不支持手动配置表格树的渲染，它自作多情的要给你渲染成表格树
+    解决方案：将你数据中的字段 children 改个名字就可以
+   -->
   <el-table
     :data="roles"
     border
@@ -31,7 +42,7 @@
     style="width: 100%">
     <el-table-column type="expand">
       <template slot-scope="scope">
-        <el-row class="first" v-for="first in scope.row.children" :key="first.id">
+        <el-row class="first" v-for="first in scope.row.rights" :key="first.id">
           <!-- 一级 -->
           <el-col :span="4">
             <el-tag closable @close="handleDeleteRights(scope.row, first)">{{ first.authName }}</el-tag>
@@ -123,6 +134,10 @@ export default {
     async loadRoles () {
       const { data, meta } = await getRoleList()
       if (meta.status === 200) {
+        data.forEach(item => {
+          item.rights = item.children
+          delete item.children // 删除 children
+        })
         this.roles = data
       }
     },
